@@ -8,7 +8,6 @@ import BookingSection from './components/BookingSection'
 import Footer from './components/Footer'
 import AdminLogin from './components/AdminLogin'
 import AdminDashboard from './components/AdminDashboard'
-import DesktopViewToggle from './components/DesktopViewToggle'
 import { useState, useEffect } from 'react'
 
 function App() {
@@ -69,7 +68,6 @@ function App() {
       ) : view === 'admin-dashboard' ? (
         <AdminDashboard onLogout={() => setView('home')} />
       ) : null}
-      <DesktopViewToggle />
     </main>
   )
 }

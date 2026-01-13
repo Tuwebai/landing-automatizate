@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase';
 import {
     Calendar, Save,
     LogOut, Trash2, ExternalLink, RefreshCw,
-    Settings, Users, X, Clock, Check, RotateCcw
+    Settings, Users, X, Clock
 } from 'lucide-react';
 
 interface AvailabilityData {
@@ -457,25 +457,9 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                         </motion.div>
                     ) : (
                         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
-                                <div>
-                                    <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1d1d1f', marginBottom: '8px' }}>Llamadas Agendadas</h1>
-                                    <p style={{ color: '#64748b', fontSize: '1rem' }}>Gestiona tus prospectos como una lista de tareas. Marca las llamadas como completadas para organizarte mejor.</p>
-                                </div>
-                                <button
-                                    onClick={fetchData}
-                                    style={{
-                                        display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 20px',
-                                        borderRadius: '12px', border: '1px solid #e2e8f0', background: '#fff',
-                                        color: '#2079eb', fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s',
-                                        boxShadow: '0 4px 6px rgba(0,0,0,0.02)'
-                                    }}
-                                    onMouseOver={(e) => e.currentTarget.style.borderColor = '#2079eb'}
-                                    onMouseOut={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
-                                >
-                                    <RefreshCw size={18} className={isLoading ? 'animate-spin' : ''} />
-                                    Actualizar
-                                </button>
+                            <div style={{ marginBottom: '40px' }}>
+                                <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1d1d1f', marginBottom: '8px' }}>Llamadas Agendadas</h1>
+                                <p style={{ color: '#64748b', fontSize: '1rem' }}>Gestiona tus prospectos como una lista de tareas. Marca las llamadas como completadas para organizarte mejor.</p>
                             </div>
 
                             {/* PENDING TABLE */}
@@ -491,43 +475,21 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                                     {bookings.filter(b => b.status !== 'completed').length > 0 ? bookings.filter(b => b.status !== 'completed').map(booking => (
                                         <div key={booking.id} style={{
                                             background: '#fff', padding: '24px', borderRadius: '24px', border: '1px solid #e2e8f0',
-                                            display: 'flex', gap: '20px', alignItems: 'flex-start',
-                                            transition: 'box-shadow 0.3s'
+                                            display: 'flex', gap: '20px', alignItems: 'flex-start'
                                         }}>
                                             <button
                                                 onClick={async () => {
-                                                    try {
-                                                        const { error } = await supabase.from('lndng_calls').update({ status: 'completed' }).eq('id', booking.id);
-                                                        if (error) throw error;
-                                                        setBookings(bookings.map(b => b.id === booking.id ? { ...b, status: 'completed' } : b));
-                                                        setMessage({ type: 'success', text: 'Llamada marcada como completada' });
-                                                    } catch (err: any) {
-                                                        console.error('Error updating booking:', err);
-                                                        setMessage({ type: 'error', text: `Error: ${err.message || 'No se pudo actualizar'}` });
-                                                    } finally {
-                                                        setTimeout(() => setMessage({ type: '', text: '' }), 3000);
-                                                    }
+                                                    const { error } = await supabase.from('lndng_calls').update({ status: 'completed' }).eq('id', booking.id);
+                                                    if (!error) setBookings(bookings.map(b => b.id === booking.id ? { ...b, status: 'completed' } : b));
                                                 }}
-                                                title="Marcar como realizada"
                                                 style={{
-                                                    width: '32px', height: '32px', borderRadius: '10px', border: '1px solid #e2e8f0',
-                                                    background: '#fff', cursor: 'pointer', marginTop: '4px', flexShrink: 0,
-                                                    display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s',
-                                                    color: '#94a3b8'
+                                                    width: '24px', height: '24px', borderRadius: '6px', border: '2px solid #e2e8f0',
+                                                    background: 'none', cursor: 'pointer', marginTop: '4px', flexShrink: 0,
+                                                    display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s'
                                                 }}
-                                                onMouseOver={(e) => {
-                                                    e.currentTarget.style.borderColor = '#10b981';
-                                                    e.currentTarget.style.color = '#10b981';
-                                                    e.currentTarget.style.background = 'rgba(16,185,129,0.05)';
-                                                }}
-                                                onMouseOut={(e) => {
-                                                    e.currentTarget.style.borderColor = '#e2e8f0';
-                                                    e.currentTarget.style.color = '#94a3b8';
-                                                    e.currentTarget.style.background = '#fff';
-                                                }}
-                                            >
-                                                <Check size={20} />
-                                            </button>
+                                                onMouseOver={(e) => (e.currentTarget.style.borderColor = '#2079eb')}
+                                                onMouseOut={(e) => (e.currentTarget.style.borderColor = '#e2e8f0')}
+                                            />
 
                                             <div style={{ flex: 1 }}>
                                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
@@ -587,37 +549,16 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                                         }}>
                                             <button
                                                 onClick={async () => {
-                                                    try {
-                                                        const { error } = await supabase.from('lndng_calls').update({ status: 'pending' }).eq('id', booking.id);
-                                                        if (error) throw error;
-                                                        setBookings(bookings.map(b => b.id === booking.id ? { ...b, status: 'pending' } : b));
-                                                        setMessage({ type: 'success', text: 'Llamada reabierta' });
-                                                    } catch (err: any) {
-                                                        console.error('Error updating booking:', err);
-                                                        setMessage({ type: 'error', text: `Error: ${err.message || 'No se pudo actualizar'}` });
-                                                    } finally {
-                                                        setTimeout(() => setMessage({ type: '', text: '' }), 3000);
-                                                    }
+                                                    const { error } = await supabase.from('lndng_calls').update({ status: 'pending' }).eq('id', booking.id);
+                                                    if (!error) setBookings(bookings.map(b => b.id === booking.id ? { ...b, status: 'pending' } : b));
                                                 }}
-                                                title="Reabrir llamada"
                                                 style={{
-                                                    width: '32px', height: '32px', borderRadius: '10px', border: '1px solid #e2e8f0',
-                                                    background: '#fff', color: '#94a3b8', cursor: 'pointer', flexShrink: 0,
-                                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                    transition: 'all 0.2s'
-                                                }}
-                                                onMouseOver={(e) => {
-                                                    e.currentTarget.style.background = 'rgba(32,121,235,0.05)';
-                                                    e.currentTarget.style.color = '#2079eb';
-                                                    e.currentTarget.style.borderColor = '#2079eb';
-                                                }}
-                                                onMouseOut={(e) => {
-                                                    e.currentTarget.style.background = '#fff';
-                                                    e.currentTarget.style.color = '#94a3b8';
-                                                    e.currentTarget.style.borderColor = '#e2e8f0';
+                                                    width: '22px', height: '22px', borderRadius: '6px', border: 'none',
+                                                    background: '#10b981', cursor: 'pointer', flexShrink: 0,
+                                                    display: 'flex', alignItems: 'center', justifyContent: 'center'
                                                 }}
                                             >
-                                                <RotateCcw size={18} />
+                                                <Save size={14} color="#fff" />
                                             </button>
 
                                             <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
