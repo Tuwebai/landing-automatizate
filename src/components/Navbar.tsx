@@ -3,11 +3,10 @@ import { motion } from 'framer-motion';
 
 interface NavbarProps {
     setView?: (view: 'home' | 'case-study' | 'admin-login' | 'admin-dashboard') => void;
-    currentView?: string;
     onNavigate?: (id: string) => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ setView, currentView, onNavigate }) => {
+const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
     const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {

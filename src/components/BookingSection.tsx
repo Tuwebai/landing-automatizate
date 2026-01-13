@@ -40,7 +40,7 @@ const BookingSection: React.FC = () => {
 
     const fetchAvailability = async () => {
         try {
-            const { data, error } = await supabase
+            const { data } = await supabase
                 .from('lndng_settings')
                 .select('value')
                 .eq('key', 'availability')

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Instagram, Linkedin, Mail, ArrowUpRight, Phone, MessageCircle } from 'lucide-react';
+import { Mail, ArrowUpRight, Phone, MessageCircle } from 'lucide-react';
 
 interface FooterProps {
     onAdminClick: () => void;
