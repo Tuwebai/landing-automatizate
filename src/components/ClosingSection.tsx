@@ -145,14 +145,16 @@ const ClosingSection: React.FC = () => {
                     </span>
                 </motion.div>
 
-                {/* Feature Grid - Rigid 2x2 Grid Layout */}
+                {/* Feature Grid - Optimized for PC and Mobile */}
                 <div style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(2, 1fr)', // Rigid 2 columns
-                    gap: '24px',
+                    gridTemplateColumns: window.innerWidth > 640 ? 'repeat(2, 1fr)' : 'repeat(2, 1fr)', // Always 2 columns as requested for mobile
+                    gap: '20px',
                     width: '100%',
-                    maxWidth: '850px', // More compact for 2x2
-                    marginBottom: '60px'
+                    maxWidth: '900px',
+                    marginBottom: '60px',
+                    padding: '0 10px',
+                    boxSizing: 'border-box'
                 }}>
                     {FEATURES.map((feature, idx) => (
                         <motion.div
@@ -166,35 +168,37 @@ const ClosingSection: React.FC = () => {
                                 position: 'relative',
                                 borderRadius: '24px',
                                 padding: '1.5px',
-                                background: blueGradient
+                                background: blueGradient,
+                                width: '100%' // Ensure full width within grid cell
                             }}
                         >
                             <div style={{
                                 background: '#ffffff',
-                                padding: '32px 24px',
+                                padding: window.innerWidth > 640 ? '30px 24px' : '20px 15px',
                                 borderRadius: '22.5px',
                                 textAlign: 'left',
                                 display: 'flex',
                                 flexDirection: 'column',
-                                gap: '16px',
-                                height: '100%'
+                                gap: window.innerWidth > 640 ? '16px' : '10px',
+                                height: '100%',
+                                boxSizing: 'border-box'
                             }}>
                                 <div style={{
-                                    width: '48px',
-                                    height: '48px',
-                                    borderRadius: '14px',
+                                    width: window.innerWidth > 640 ? '48px' : '40px',
+                                    height: window.innerWidth > 640 ? '48px' : '40px',
+                                    borderRadius: '12px',
                                     background: 'rgba(32,121,235,0.05)',
                                     color: '#2079eb',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center'
                                 }}>
-                                    {feature.icon}
+                                    {React.cloneElement(feature.icon as any, { size: window.innerWidth > 640 ? 24 : 20 })}
                                 </div>
-                                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1d1d1f', lineHeight: 1.2 }}>
+                                <h3 style={{ fontSize: window.innerWidth > 640 ? '1.15rem' : '0.9rem', fontWeight: 800, color: '#1d1d1f', lineHeight: 1.2 }}>
                                     {feature.title}
                                 </h3>
-                                <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: 1.6, margin: 0 }}>
+                                <p style={{ fontSize: window.innerWidth > 640 ? '0.95rem' : '0.75rem', color: '#666', lineHeight: 1.5, margin: 0 }}>
                                     {feature.desc}
                                 </p>
                             </div>
@@ -234,14 +238,7 @@ const ClosingSection: React.FC = () => {
                 </motion.div>
             </div>
 
-            {/* Responsive styles for mobile grid */}
-            <style>{`
-                @media (max-width: 640px) {
-                    .feature-grid {
-                        grid-template-columns: 1fr !important;
-                    }
-                }
-            `}</style>
+            {/* Removed internal style tag as logic is handled via JS for better control */}
         </section>
     );
 };

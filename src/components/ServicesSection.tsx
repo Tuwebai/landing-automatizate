@@ -176,15 +176,24 @@ const ServicesSection: React.FC = () => {
                     </motion.button>
                 </div>
 
-                {/* Sliding List */}
+                {/* Sliding List - Drag enabled */}
                 <motion.div
+                    drag="x"
+                    dragConstraints={{ left: 0, right: 0 }}
+                    onDragEnd={(_, info) => {
+                        const threshold = 50;
+                        if (info.offset.x < -threshold) next();
+                        else if (info.offset.x > threshold) prev();
+                    }}
                     animate={{ x: xOffset }}
-                    transition={{ type: 'spring', stiffness: 70, damping: 18 }}
+                    transition={{ type: 'spring', stiffness: 100, damping: 20 }}
                     style={{
                         display: 'flex',
                         gap: `${gap}px`,
-                        padding: '10px 0'
+                        padding: '20px 0',
+                        cursor: 'grab'
                     }}
+                    whileTap={{ cursor: 'grabbing' }}
                 >
                     {SERVICES.map((service, index) => (
                         <motion.div

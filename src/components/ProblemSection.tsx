@@ -95,51 +95,55 @@ const ProblemSection: React.FC = () => {
                         position: 'relative',
                         display: 'flex',
                         justifyContent: 'center',
-                        perspective: '1200px'
+                        perspective: '1200px',
+                        width: '100%',
+                        margin: '0 auto'
                     }}>
-                        <AnimatePresence mode="popLayout">
+                        <AnimatePresence mode="popLayout" initial={false}>
                             {visibleNews.map((item, idx) => (
                                 <motion.div
                                     key={`${item.text}-${newsCounter - idx}`}
+                                    layout
                                     initial={{ opacity: 0, x: 30, scale: 0.95 }}
                                     animate={{
                                         opacity: 1 - idx * 0.25,
                                         y: idx * 35,
-                                        z: -idx * 50,
+                                        z: -idx * 30,
                                         scale: 1 - idx * 0.04,
-                                        filter: `blur(${idx * 1.2}px)`
+                                        filter: idx > 1 ? `blur(${idx * 1}px)` : 'none'
                                     }}
-                                    exit={{ opacity: 0, x: -80, scale: 0.9, transition: { duration: 0.3 } }}
-                                    transition={{ type: 'spring', stiffness: 120, damping: 18 }}
+                                    exit={{ opacity: 0, x: -80, scale: 0.9, transition: { duration: 0.2 } }}
+                                    transition={{ type: 'spring', stiffness: 150, damping: 20 }}
                                     style={{
                                         position: 'absolute',
-                                        width: 'clamp(280px, 100%, 480px)',
-                                        background: 'rgba(255, 255, 255, 0.98)',
-                                        padding: '20px 24px',
-                                        borderRadius: '24px',
-                                        boxShadow: '0 15px 35px rgba(0,0,0,0.05)',
+                                        width: 'calc(100% - 40px)',
+                                        maxWidth: '480px',
+                                        background: '#ffffff',
+                                        padding: '16px 20px',
+                                        borderRadius: '20px',
+                                        boxShadow: '0 10px 25px rgba(0,0,0,0.05)',
                                         border: '1px solid rgba(0,0,0,0.04)',
-                                        backdropFilter: 'blur(8px)',
                                         display: 'flex',
                                         flexDirection: 'column',
-                                        gap: '10px',
-                                        zIndex: 10 - idx
+                                        gap: '8px',
+                                        zIndex: 10 - idx,
+                                        willChange: 'transform, opacity'
                                     }}
                                 >
                                     <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-                                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: item.color, letterSpacing: '0.04em' }}>{item.company}</span>
+                                        <span style={{ fontSize: '0.7rem', fontWeight: 700, color: item.color, letterSpacing: '0.04em' }}>{item.company}</span>
                                         <motion.span
                                             animate={{ opacity: [0.5, 1, 0.5] }}
-                                            transition={{ duration: 1.5, repeat: Infinity }}
+                                            transition={{ duration: 2, repeat: Infinity }}
                                             style={{
-                                                fontSize: '0.65rem', fontWeight: 800, color: '#2079eb',
-                                                background: 'rgba(32, 121, 235, 0.08)', padding: '3px 8px', borderRadius: '15px'
+                                                fontSize: '0.6rem', fontWeight: 800, color: '#2079eb',
+                                                background: 'rgba(32, 121, 235, 0.08)', padding: '2px 6px', borderRadius: '15px'
                                             }}
                                         >
                                             AHORA
                                         </motion.span>
                                     </div>
-                                    <p style={{ fontSize: '1.05rem', fontWeight: 600, color: '#1d1d1f', margin: 0 }}>{item.text}</p>
+                                    <p style={{ fontSize: '1rem', fontWeight: 600, color: '#1d1d1f', margin: 0 }}>{item.text}</p>
                                 </motion.div>
                             ))}
                         </AnimatePresence>

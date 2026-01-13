@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
 
 interface NavbarProps {
     setView?: (view: 'home' | 'case-study' | 'admin-login' | 'admin-dashboard') => void;
@@ -8,6 +9,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
     const [scrolled, setScrolled] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -84,11 +86,12 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                     </span>
                 </div>
 
-                {/* Links Section - Always Visible */}
+                {/* Desktop Links Section - Hidden on mobile */}
                 <div style={{
-                    display: 'flex',
-                    gap: 'clamp(10px, 3vw, 30px)',
-                    alignItems: 'center'
+                    display: window.innerWidth > 968 ? 'flex' : 'none',
+                    gap: '40px',
+                    alignItems: 'center',
+                    marginLeft: 'auto'
                 }}>
                     {navLinks.map((link) => (
                         <motion.button
@@ -100,12 +103,12 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                                 border: 'none',
                                 textDecoration: 'none',
                                 color: '#1d1d1f',
-                                fontSize: 'clamp(0.75rem, 1.5vw, 0.9rem)',
+                                fontSize: '0.9rem',
                                 fontWeight: 600,
                                 opacity: 0.8,
                                 transition: 'opacity 0.2s ease',
                                 cursor: 'pointer',
-                                padding: 0
+                                padding: '10px 0'
                             }}
                             onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
                             onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.8')}
@@ -114,7 +117,6 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                         </motion.button>
                     ))}
 
-                    {/* CTA Button - Integrated in the same row */}
                     <motion.div
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -122,19 +124,103 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                         style={{
                             background: 'linear-gradient(45deg, #2079eb, #5fd6fe)',
                             color: 'white',
-                            padding: '8px clamp(12px, 2vw, 24px)',
+                            padding: '10px 28px',
                             borderRadius: '980px',
-                            fontSize: 'clamp(0.7rem, 1.2vw, 0.85rem)',
+                            fontSize: '0.9rem',
                             fontWeight: 700,
                             cursor: 'pointer',
                             boxShadow: '0 4px 15px rgba(32, 121, 235, 0.2)',
-                            marginLeft: 'clamp(5px, 2vw, 15px)'
+                            marginLeft: '10px'
                         }}
                     >
                         Agendar
                     </motion.div>
                 </div>
+
+                {/* Mobile Menu Button */}
+                <div
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    style={{
+                        display: window.innerWidth <= 968 ? 'flex' : 'none',
+                        cursor: 'pointer',
+                        padding: '10px',
+                        zIndex: 1001,
+                        color: '#1d1d1f'
+                    }}
+                >
+                    {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                </div>
             </div>
+
+            {/* Mobile Menu Overlay */}
+            <AnimatePresence>
+                {isMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, x: '100%' }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: '100%' }}
+                        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                        style={{
+                            position: 'fixed',
+                            top: 0,
+                            right: 0,
+                            bottom: 0,
+                            width: '80%',
+                            maxWidth: '300px',
+                            background: '#ffffff',
+                            boxShadow: '-10px 0 30px rgba(0,0,0,0.1)',
+                            zIndex: 1000,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            padding: '80px 40px',
+                            gap: '30px'
+                        }}
+                    >
+                        {navLinks.map((link) => (
+                            <motion.button
+                                key={link.name}
+                                onClick={() => {
+                                    onNavigate?.(link.id);
+                                    setIsMenuOpen(false);
+                                }}
+                                whileTap={{ scale: 0.95 }}
+                                style={{
+                                    background: 'none',
+                                    border: 'none',
+                                    textAlign: 'left',
+                                    fontSize: '1.2rem',
+                                    fontWeight: 700,
+                                    color: '#1d1d1f',
+                                    cursor: 'pointer',
+                                    padding: '10px 0'
+                                }}
+                            >
+                                {link.name}
+                            </motion.button>
+                        ))}
+                        <motion.div
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => {
+                                onNavigate?.('booking-section');
+                                setIsMenuOpen(false);
+                            }}
+                            style={{
+                                background: 'linear-gradient(45deg, #2079eb, #5fd6fe)',
+                                color: 'white',
+                                padding: '15px',
+                                borderRadius: '15px',
+                                textAlign: 'center',
+                                fontSize: '1rem',
+                                fontWeight: 800,
+                                marginTop: '20px',
+                                cursor: 'pointer'
+                            }}
+                        >
+                            Agendar Llamada
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </motion.nav>
     );
 };

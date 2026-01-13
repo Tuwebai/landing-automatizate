@@ -12,6 +12,13 @@ const BookingSection: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
+    const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+    useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -169,6 +176,33 @@ const BookingSection: React.FC = () => {
                     >
                         Selecciona un horario para tu llamada estratégica (Duración: 1 hora)
                     </motion.p>
+
+                    {windowWidth <= 968 && (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            style={{
+                                marginTop: '40px',
+                                background: '#f8fafc',
+                                padding: '24px',
+                                borderRadius: '24px',
+                                border: '1px solid #e2e8f0',
+                                textAlign: 'left',
+                                maxWidth: '500px',
+                                margin: '40px auto 0 auto'
+                            }}
+                        >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                                <span style={{ fontWeight: 800, fontSize: '1.1rem', color: '#1d1d1f' }}>Cupos disponibles</span>
+                                <span style={{ fontWeight: 800, color: '#2079eb', fontSize: '1.1rem' }}>4 disponibles</span>
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: '6px' }}>
+                                {Array.from({ length: 10 }).map((_, i) => (
+                                    <div key={i} style={{ height: '10px', borderRadius: '4px', background: i < 6 ? blueGradient : '#e2e8f0' }} />
+                                ))}
+                            </div>
+                        </motion.div>
+                    )}
                 </div>
 
                 {/* Booking Interface */}
@@ -209,10 +243,15 @@ const BookingSection: React.FC = () => {
                                         <CalendarIcon size={24} color="#2079eb" />
                                     </div>
 
-                                    {/* Calendar Grid */}
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '10px', marginBottom: '40px' }}>
+                                    {/* Calendar Grid - Responsive Gap & Font */}
+                                    <div style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: 'repeat(7, 1fr)',
+                                        gap: windowWidth > 640 ? '10px' : '5px',
+                                        marginBottom: '32px'
+                                    }}>
                                         {['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'].map(d => (
-                                            <div key={d} style={{ fontSize: '0.8rem', fontWeight: 700, color: '#94a3b8', textAlign: 'center', paddingBottom: '10px' }}>
+                                            <div key={d} style={{ fontSize: windowWidth > 640 ? '0.8rem' : '0.7rem', fontWeight: 700, color: '#94a3b8', textAlign: 'center', paddingBottom: '8px' }}>
                                                 {d}
                                             </div>
                                         ))}
@@ -227,14 +266,17 @@ const BookingSection: React.FC = () => {
                                                     onClick={() => available && handleDateSelect(day)}
                                                     style={{
                                                         aspectRatio: '1',
-                                                        borderRadius: '12px',
+                                                        borderRadius: '10px',
                                                         border: 'none',
                                                         background: selected ? blueGradient : (available ? '#f8fafc' : 'transparent'),
                                                         color: selected ? '#fff' : (available ? '#1d1d1f' : '#cbd5e1'),
                                                         fontWeight: (available || selected) ? 700 : 400,
                                                         cursor: available ? 'pointer' : 'default',
-                                                        fontSize: '0.95rem',
-                                                        transition: 'all 0.2s'
+                                                        fontSize: windowWidth > 640 ? '0.95rem' : '0.85rem',
+                                                        transition: 'all 0.2s',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center'
                                                     }}
                                                 >
                                                     {day}
@@ -323,18 +365,26 @@ const BookingSection: React.FC = () => {
                                         <h3 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Detalles del Agendado</h3>
                                     </div>
 
-                                    <div style={{ background: '#f8fafc', padding: '20px', borderRadius: '16px', marginBottom: '32px', display: 'flex', gap: '20px' }}>
-                                        <div style={{ textAlign: 'center' }}>
+                                    <div style={{
+                                        background: '#f8fafc',
+                                        padding: '20px',
+                                        borderRadius: '16px',
+                                        marginBottom: '32px',
+                                        display: 'flex',
+                                        flexDirection: windowWidth > 500 ? 'row' : 'column',
+                                        gap: windowWidth > 500 ? '20px' : '10px'
+                                    }}>
+                                        <div style={{ textAlign: windowWidth > 500 ? 'center' : 'left', flex: 1 }}>
                                             <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700 }}>Día</div>
                                             <div style={{ fontWeight: 800 }}>{selectedDate?.toLocaleDateString()}</div>
                                         </div>
-                                        <div style={{ width: '1px', background: '#e2e8f0' }} />
-                                        <div style={{ textAlign: 'center' }}>
+                                        {windowWidth > 500 && <div style={{ width: '1px', background: '#e2e8f0' }} />}
+                                        <div style={{ textAlign: windowWidth > 500 ? 'center' : 'left', flex: 1 }}>
                                             <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700 }}>Hora</div>
                                             <div style={{ fontWeight: 800 }}>{selectedTime}hs</div>
                                         </div>
-                                        <div style={{ width: '1px', background: '#e2e8f0' }} />
-                                        <div style={{ textAlign: 'center' }}>
+                                        {windowWidth > 500 && <div style={{ width: '1px', background: '#e2e8f0' }} />}
+                                        <div style={{ textAlign: windowWidth > 500 ? 'center' : 'left', flex: 1 }}>
                                             <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700 }}>Duración</div>
                                             <div style={{ fontWeight: 800 }}>1 hora</div>
                                         </div>
@@ -379,21 +429,25 @@ const BookingSection: React.FC = () => {
                                         </div>
 
                                         <div style={{
-                                            padding: '20px',
+                                            padding: '16px 20px',
                                             borderRadius: '16px',
                                             background: '#f8fafc',
-                                            border: '1px solid #e2e8f0',
-                                            cursor: 'pointer'
+                                            border: '2px solid #e2e8f0',
+                                            cursor: 'pointer',
+                                            transition: 'border-color 0.2s'
                                         }} onClick={() => setFormData({ ...formData, hasInvestment: !formData.hasInvestment })}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                                                 <div style={{
-                                                    width: '24px', height: '24px', borderRadius: '6px',
-                                                    border: '2px solid #2079eb', background: formData.hasInvestment ? blueGradient : 'transparent',
-                                                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff'
+                                                    minWidth: '24px', height: '24px', borderRadius: '6px',
+                                                    border: '2px solid #2079eb', background: formData.hasInvestment ? blueGradient : '#fff',
+                                                    display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff',
+                                                    boxShadow: formData.hasInvestment ? '0 4px 10px rgba(32,121,235,0.2)' : 'none'
                                                 }}>
-                                                    {formData.hasInvestment && <CheckCircle2 size={16} />}
+                                                    {formData.hasInvestment && <CheckCircle2 size={18} strokeWidth={3} />}
                                                 </div>
-                                                <span style={{ fontSize: '0.95rem', fontWeight: 700 }}>Cuento con la inversión necesaria (Se especifica en el apartado Inversión)</span>
+                                                <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#1d1d1f', lineHeight: 1.3 }}>
+                                                    Cuento con la inversión necesaria (Se especifica en el apartado Inversión)
+                                                </span>
                                             </div>
                                         </div>
 
@@ -503,53 +557,55 @@ const BookingSection: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Progress Bar / Availability Urgency */}
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            style={{
-                                marginTop: '48px',
-                                background: '#f8fafc',
-                                padding: '24px',
-                                borderRadius: '24px',
-                                border: '1px solid #e2e8f0',
-                                position: 'relative',
-                                overflow: 'hidden'
-                            }}
-                        >
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                                <span style={{ fontWeight: 800, fontSize: '1.1rem', color: '#1d1d1f' }}>Cupos disponibles</span>
-                                <span style={{ fontWeight: 800, color: '#2079eb', fontSize: '1.1rem' }}>4 disponibles</span>
-                            </div>
+                        {/* Progress Bar / Availability Urgency - Hidden on Mobile (moved up) */}
+                        {windowWidth > 968 && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                style={{
+                                    marginTop: '48px',
+                                    background: '#f8fafc',
+                                    padding: '24px',
+                                    borderRadius: '24px',
+                                    border: '1px solid #e2e8f0',
+                                    position: 'relative',
+                                    overflow: 'hidden'
+                                }}
+                            >
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                                    <span style={{ fontWeight: 800, fontSize: '1.1rem', color: '#1d1d1f' }}>Cupos disponibles</span>
+                                    <span style={{ fontWeight: 800, color: '#2079eb', fontSize: '1.1rem' }}>4 disponibles</span>
+                                </div>
 
-                            {/* Segmented Progress Bar */}
-                            <div style={{
-                                display: 'grid',
-                                gridTemplateColumns: 'repeat(10, 1fr)',
-                                gap: '6px',
-                                marginBottom: '12px'
-                            }}>
-                                {Array.from({ length: 10 }).map((_, i) => (
-                                    <motion.div
-                                        key={i}
-                                        initial={{ opacity: 0, scale: 0.8 }}
-                                        whileInView={{ opacity: 1, scale: 1 }}
-                                        transition={{ delay: i * 0.05 }}
-                                        style={{
-                                            height: '10px',
-                                            borderRadius: '4px',
-                                            background: i < 6 ? blueGradient : '#e2e8f0',
-                                            boxShadow: i < 6 ? '0 2px 8px rgba(32,121,235,0.2)' : 'none'
-                                        }}
-                                    />
-                                ))}
-                            </div>
+                                {/* Segmented Progress Bar */}
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(10, 1fr)',
+                                    gap: '6px',
+                                    marginBottom: '12px'
+                                }}>
+                                    {Array.from({ length: 10 }).map((_, i) => (
+                                        <motion.div
+                                            key={i}
+                                            initial={{ opacity: 0, scale: 0.8 }}
+                                            whileInView={{ opacity: 1, scale: 1 }}
+                                            transition={{ delay: i * 0.05 }}
+                                            style={{
+                                                height: '10px',
+                                                borderRadius: '4px',
+                                                background: i < 6 ? blueGradient : '#e2e8f0',
+                                                boxShadow: i < 6 ? '0 2px 8px rgba(32,121,235,0.2)' : 'none'
+                                            }}
+                                        />
+                                    ))}
+                                </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#94a3b8', fontSize: '0.85rem' }}>
-                                <div style={{ width: '6px', height: '6px', background: '#10b981', borderRadius: '50%' }} />
-                                <span style={{ fontWeight: 600 }}>Actualizado hace 12 segundos</span>
-                            </div>
-                        </motion.div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#94a3b8', fontSize: '0.85rem' }}>
+                                    <div style={{ width: '6px', height: '6px', background: '#10b981', borderRadius: '50%' }} />
+                                    <span style={{ fontWeight: 600 }}>Actualizado hace 12 segundos</span>
+                                </div>
+                            </motion.div>
+                        )}
 
                         {/* WhatsApp Alternative Contact */}
                         <motion.div

@@ -78,28 +78,13 @@ const CaseStudySection: React.FC<CaseStudySectionProps> = ({ mode, onNavigate, o
                 ],
                 icon: <Bell size={20} />
             }
-        },
-        {
-            original: {
-                title: "Incertidumbre operativa",
-                desc: "El cliente no podía visualizar sus métricas históricas ni el rendimiento.",
-                icon: <TrendingUp size={18} />
-            },
-            implementation: {
-                title: "Portal de clientes",
-                points: [
-                    "Link exclusivo para visualizar métricas y rendimiento.",
-                    "Análisis de ingresos, egresos y días pico."
-                ],
-                icon: <LayoutDashboard size={20} />
-            }
         }
     ];
 
     if (mode === 'preview') {
         return (
             <section id="case-studies-section" style={{ padding: '80px 20px', background: 'linear-gradient(to bottom, #ffffff, #f0f9ff)' }}>
-                <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+                <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
                     <div style={{ textAlign: 'center', marginBottom: '32px' }}>
                         <motion.span
                             initial={{ opacity: 0 }}
@@ -136,11 +121,14 @@ const CaseStudySection: React.FC<CaseStudySectionProps> = ({ mode, onNavigate, o
 
                     <motion.div
                         whileHover={{ y: -5 }}
-                        onClick={onNavigate}
+                        onClick={() => {
+                            window.scrollTo(0, 0);
+                            onNavigate?.();
+                        }}
                         style={{
                             background: '#ffffff',
                             borderRadius: '32px',
-                            padding: '45px 35px',
+                            padding: windowWidth > 768 ? '45px 35px' : '30px 20px',
                             border: '1px solid rgba(0,0,0,0.06)',
                             boxShadow: '0 20px 50px rgba(0,0,0,0.03)',
                             cursor: 'pointer',
