@@ -274,14 +274,16 @@ const CaseStudySection: React.FC<CaseStudySectionProps> = ({ mode, onNavigate, o
 
                         <div style={{
                             display: 'grid',
-                            gridTemplateColumns: windowWidth > 1100 ? 'repeat(4, 1fr)' : windowWidth > 640 ? 'repeat(2, 1fr)' : '1fr',
+                            gridTemplateColumns: windowWidth > 1100 ? `repeat(${CASE_DATA.length}, 1fr)` : windowWidth > 640 ? 'repeat(2, 1fr)' : '1fr',
                             alignItems: 'start',
                             gap: '30px',
                             background: '#ffffff',
                             padding: '40px',
                             borderRadius: '40px',
                             border: '1px solid rgba(0,0,0,0.05)',
-                            boxShadow: '0 10px 40px rgba(0,0,0,0.02)'
+                            boxShadow: '0 10px 40px rgba(0,0,0,0.02)',
+                            maxWidth: windowWidth > 1100 ? '900px' : '100%',
+                            margin: '0 auto'
                         }}>
                             {CASE_DATA.map((item, index) => (
                                 <div key={index} style={{
@@ -337,8 +339,10 @@ const CaseStudySection: React.FC<CaseStudySectionProps> = ({ mode, onNavigate, o
 
                         <div style={{
                             display: 'grid',
-                            gridTemplateColumns: windowWidth > 1100 ? 'repeat(4, 1fr)' : windowWidth > 640 ? 'repeat(2, 1fr)' : '1fr',
-                            gap: '24px'
+                            gridTemplateColumns: windowWidth > 1100 ? `repeat(${CASE_DATA.length}, 1fr)` : windowWidth > 640 ? 'repeat(2, 1fr)' : '1fr',
+                            gap: '24px',
+                            maxWidth: windowWidth > 1100 ? '1000px' : '100%',
+                            margin: '0 auto'
                         }}>
                             {CASE_DATA.map((item, index) => (
                                 <motion.div
