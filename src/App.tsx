@@ -45,7 +45,7 @@ function App() {
   return (
     <main>
       {view !== 'admin-login' && view !== 'admin-dashboard' && (
-        <Navbar setView={setView} currentView={view} onNavigate={scrollToSection} />
+        <Navbar setView={setView} onNavigate={scrollToSection} />
       )}
 
       {view === 'home' ? (
