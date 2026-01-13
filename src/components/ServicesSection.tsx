@@ -176,22 +176,21 @@ const ServicesSection: React.FC = () => {
                     </motion.button>
                 </div>
 
-                {/* Sliding List - Drag enabled */}
+                {/* Sliding List - Drag Optimized with Pan events */}
                 <motion.div
-                    drag="x"
-                    dragConstraints={{ left: 0, right: 0 }}
-                    onDragEnd={(_, info) => {
+                    onPanEnd={(_, info) => {
                         const threshold = 50;
                         if (info.offset.x < -threshold) next();
                         else if (info.offset.x > threshold) prev();
                     }}
                     animate={{ x: xOffset }}
-                    transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+                    transition={{ type: 'spring', stiffness: 120, damping: 20, mass: 1 }}
                     style={{
                         display: 'flex',
                         gap: `${gap}px`,
                         padding: '20px 0',
-                        cursor: 'grab'
+                        cursor: 'grab',
+                        touchAction: 'none' // Prevent browser scrolling while panning
                     }}
                     whileTap={{ cursor: 'grabbing' }}
                 >
@@ -199,11 +198,10 @@ const ServicesSection: React.FC = () => {
                         <motion.div
                             key={index}
                             animate={{
-                                scale: currentIndex === index ? 1 : 0.94,
-                                opacity: currentIndex === index ? 1 : 0.25,
-                                filter: currentIndex === index ? 'blur(0px)' : 'blur(3px)'
+                                scale: currentIndex === index ? 1 : 0.96,
+                                opacity: currentIndex === index ? 1 : 0.4
                             }}
-                            transition={{ duration: 0.4 }}
+                            transition={{ duration: 0.3 }}
                             style={{
                                 flex: `0 0 ${cardWidth}px`,
                                 height: cardHeight,
@@ -215,6 +213,7 @@ const ServicesSection: React.FC = () => {
                                 display: 'flex',
                                 flexDirection: windowWidth > 800 ? 'row' : 'column',
                                 position: 'relative',
+                                userSelect: 'none'
                             }}
                         >
                             {/* Image Container - Top on mobile, right on desktop */}

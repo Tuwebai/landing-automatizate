@@ -97,37 +97,40 @@ const ProblemSection: React.FC = () => {
                         justifyContent: 'center',
                         perspective: '1200px',
                         width: '100%',
-                        margin: '0 auto'
+                        margin: '0 auto',
+                        overflow: 'visible'
                     }}>
                         <AnimatePresence mode="popLayout" initial={false}>
                             {visibleNews.map((item, idx) => (
                                 <motion.div
                                     key={`${item.text}-${newsCounter - idx}`}
-                                    layout
-                                    initial={{ opacity: 0, x: 30, scale: 0.95 }}
+                                    initial={{ opacity: 0, x: 50, scale: 0.95 }}
                                     animate={{
-                                        opacity: 1 - idx * 0.25,
-                                        y: idx * 35,
-                                        z: -idx * 30,
-                                        scale: 1 - idx * 0.04,
-                                        filter: idx > 1 ? `blur(${idx * 1}px)` : 'none'
+                                        opacity: 1 - idx * 0.3,
+                                        y: idx * 40,
+                                        z: -idx * 40,
+                                        scale: 1 - idx * 0.05,
+                                        filter: 'none' // REMOVED BLUR for performance
                                     }}
-                                    exit={{ opacity: 0, x: -80, scale: 0.9, transition: { duration: 0.2 } }}
-                                    transition={{ type: 'spring', stiffness: 150, damping: 20 }}
+                                    exit={{ opacity: 0, x: -100, scale: 0.9, transition: { duration: 0.2 } }}
+                                    transition={{ type: 'spring', stiffness: 200, damping: 25 }}
                                     style={{
                                         position: 'absolute',
-                                        width: 'calc(100% - 40px)',
-                                        maxWidth: '480px',
+                                        width: '90%', // Better responsive width
+                                        maxWidth: '440px',
+                                        left: '50%',
+                                        x: '-50%', // Perfect centering
                                         background: '#ffffff',
-                                        padding: '16px 20px',
-                                        borderRadius: '20px',
-                                        boxShadow: '0 10px 25px rgba(0,0,0,0.05)',
-                                        border: '1px solid rgba(0,0,0,0.04)',
+                                        padding: '20px',
+                                        borderRadius: '24px',
+                                        boxShadow: '0 12px 30px rgba(0,0,0,0.06)',
+                                        border: '1px solid rgba(0,0,0,0.05)',
                                         display: 'flex',
                                         flexDirection: 'column',
                                         gap: '8px',
                                         zIndex: 10 - idx,
-                                        willChange: 'transform, opacity'
+                                        willChange: 'transform, opacity',
+                                        backfaceVisibility: 'hidden'
                                     }}
                                 >
                                     <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
