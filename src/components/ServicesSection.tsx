@@ -190,7 +190,7 @@ const ServicesSection: React.FC = () => {
                         gap: `${gap}px`,
                         padding: '20px 0',
                         cursor: 'grab',
-                        touchAction: 'none' // Prevent browser scrolling while panning
+                        touchAction: 'pan-y' // Allow vertical scrolling while maintaining horizontal pan logic
                     }}
                     whileTap={{ cursor: 'grabbing' }}
                 >
