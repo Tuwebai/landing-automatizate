@@ -1,0 +1,250 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+
+const AI_NEWS = [
+    { company: 'OpenAI', text: 'Vista previa de ChatGPT-5 lanzada', color: '#10a37f' },
+    { company: 'Google', text: 'Gemini 1.5 Ultra supera los benchmarks', color: '#4285f4' },
+    { company: 'Anthropic', text: 'Claude 3.5 Sonnet alcanza nivel humano en programación', color: '#d97757' },
+    { company: 'xAI', text: 'Grok-2 integrado en datos de X en tiempo real', color: '#000000' },
+    { company: 'Meta', text: 'Llama 4 entrenando en 1 millón de H100s', color: '#0668E1' },
+    { company: 'Mistral', text: 'Mistral Large 2 bate récords en Pesos Abiertos', color: '#f5d142' },
+    { company: 'NVIDIA', text: 'Proyecto G-Assist revoluciona la IA en juegos', color: '#76b900' },
+    { company: 'Apple', text: 'Modelos locales de Apple Intelligence optimizados', color: '#555555' },
+];
+
+const ProblemSection: React.FC = () => {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start end", "end start"]
+    });
+
+    const [visibleNews, setVisibleNews] = useState<any[]>([]);
+    const [newsCounter, setNewsCounter] = useState(0);
+
+    const gradientStyle = {
+        background: 'linear-gradient(45deg, #5fd6fe, #2079eb)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        display: 'inline-block'
+    };
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (document.visibilityState === 'visible') {
+                setNewsCounter(prev => prev + 1);
+            }
+        }, 800);
+        return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        const nextNews = AI_NEWS[newsCounter % AI_NEWS.length];
+        setVisibleNews(prev => {
+            const newList = [nextNews, ...prev];
+            return newList.slice(0, 4);
+        });
+    }, [newsCounter]);
+
+    return (
+        <section
+            ref={containerRef}
+            style={{
+                padding: '0 5% 100px 5%',
+                background: 'linear-gradient(to bottom, transparent 0%, #ffffff 15%, #ffffff 100%)',
+                position: 'relative',
+                overflow: 'hidden',
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'flex-start'
+            }}
+        >
+            {/* Background depth effects */}
+            <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+                <motion.div
+                    style={{
+                        position: 'absolute',
+                        top: '5%',
+                        left: '15%',
+                        width: '40vw',
+                        height: '40vw',
+                        background: 'radial-gradient(circle, rgba(95,214,254,0.2) 0%, transparent 60%)',
+                        y: useTransform(scrollYProgress, [0, 1], [-50, 200]),
+                    }}
+                />
+            </div>
+
+            <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '1000px', paddingTop: '100px' }}>
+
+                {/* News Stack Section */}
+                <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        style={{ fontSize: 'clamp(1.6rem, 4.5vw, 3rem)', fontWeight: 800, color: '#1d1d1f', marginBottom: '60px', lineHeight: 1.15 }}
+                    >
+                        En un mundo donde la IA <br />
+                        <span style={gradientStyle}>avanza a pasos agigantados</span>
+                    </motion.h2>
+
+                    <div style={{
+                        height: '240px',
+                        position: 'relative',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        perspective: '1200px'
+                    }}>
+                        <AnimatePresence mode="popLayout">
+                            {visibleNews.map((item, idx) => (
+                                <motion.div
+                                    key={`${item.text}-${newsCounter - idx}`}
+                                    initial={{ opacity: 0, x: 30, scale: 0.95 }}
+                                    animate={{
+                                        opacity: 1 - idx * 0.25,
+                                        y: idx * 35,
+                                        z: -idx * 50,
+                                        scale: 1 - idx * 0.04,
+                                        filter: `blur(${idx * 1.2}px)`
+                                    }}
+                                    exit={{ opacity: 0, x: -80, scale: 0.9, transition: { duration: 0.3 } }}
+                                    transition={{ type: 'spring', stiffness: 120, damping: 18 }}
+                                    style={{
+                                        position: 'absolute',
+                                        width: 'clamp(280px, 100%, 480px)',
+                                        background: 'rgba(255, 255, 255, 0.98)',
+                                        padding: '20px 24px',
+                                        borderRadius: '24px',
+                                        boxShadow: '0 15px 35px rgba(0,0,0,0.05)',
+                                        border: '1px solid rgba(0,0,0,0.04)',
+                                        backdropFilter: 'blur(8px)',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '10px',
+                                        zIndex: 10 - idx
+                                    }}
+                                >
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+                                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: item.color, letterSpacing: '0.04em' }}>{item.company}</span>
+                                        <motion.span
+                                            animate={{ opacity: [0.5, 1, 0.5] }}
+                                            transition={{ duration: 1.5, repeat: Infinity }}
+                                            style={{
+                                                fontSize: '0.65rem', fontWeight: 800, color: '#2079eb',
+                                                background: 'rgba(32, 121, 235, 0.08)', padding: '3px 8px', borderRadius: '15px'
+                                            }}
+                                        >
+                                            AHORA
+                                        </motion.span>
+                                    </div>
+                                    <p style={{ fontSize: '1.05rem', fontWeight: 600, color: '#1d1d1f', margin: 0 }}>{item.text}</p>
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+                    </div>
+                </div>
+
+                {/* Complexity Image Section */}
+                <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+                    <motion.h3
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        style={{ fontSize: 'clamp(1.4rem, 4.2vw, 2.6rem)', fontWeight: 700, color: '#1d1d1f', marginBottom: '30px', lineHeight: 1.2 }}
+                    >
+                        Y saber implementar las <br />
+                        <span style={gradientStyle}>herramientas correctas es complejo</span>
+                    </motion.h3>
+
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        style={{
+                            width: '100%',
+                            maxWidth: '320px',
+                            margin: '0 auto',
+                            position: 'relative'
+                        }}
+                    >
+                        <img
+                            src="/complexity-visual.png"
+                            alt="Complejidad de la IA"
+                            style={{
+                                width: '100%',
+                                height: 'auto',
+                                borderRadius: '32px',
+                                filter: 'drop-shadow(0 20px 40px rgba(95, 214, 254, 0.3)) drop-shadow(0 10px 15px rgba(32, 121, 235, 0.15))',
+                                border: '1px solid rgba(255,255,255,0.2)',
+                                position: 'relative',
+                                zIndex: 2
+                            }}
+                        />
+                        <div style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: '90%',
+                            height: '80%',
+                            background: 'linear-gradient(45deg, rgba(95,214,254,0.1), rgba(32,121,235,0.1))',
+                            filter: 'blur(60px)',
+                            zIndex: 1,
+                            borderRadius: '50%'
+                        }} />
+                    </motion.div>
+                </div>
+
+                {/* Final Statement - CARD WITH GRADIENT BORDER */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    style={{
+                        position: 'relative',
+                        padding: '1px', // Border width
+                        background: 'linear-gradient(45deg, #5fd6fe, #2079eb)',
+                        borderRadius: '40px',
+                        maxWidth: '900px',
+                        margin: '0 auto'
+                    }}
+                >
+                    <div style={{
+                        background: '#ffffff',
+                        padding: '60px 40px',
+                        borderRadius: '39px', // Sligtly smaller to match outer radius
+                        textAlign: 'center',
+                    }}>
+                        <motion.h4
+                            style={{
+                                fontSize: 'clamp(1.3rem, 3.5vw, 2.2rem)',
+                                fontWeight: 800,
+                                ...gradientStyle,
+                                marginBottom: '20px'
+                            }}
+                        >
+                            Nosotros nos encargamos de eso.
+                        </motion.h4>
+                        <motion.p
+                            style={{
+                                fontSize: 'clamp(1rem, 2.2vw, 1.5rem)',
+                                fontWeight: 500, // Balanced weight for regular text
+                                color: '#000000',
+                                maxWidth: '800px',
+                                margin: '0 auto',
+                                lineHeight: 1.5
+                            }}
+                        >
+                            Actuamos como una <span style={{ fontWeight: 800 }}>extensión de tu negocio</span>, proporcionándote una <span style={{ fontWeight: 800 }}>ventaja competitiva continua</span> y la certeza de que tu empresa trabaja siempre con <span style={{ fontWeight: 800 }}>lo último en IA</span>.
+                        </motion.p>
+                    </div>
+                </motion.div>
+
+            </div>
+        </section>
+    );
+};
+
+export default ProblemSection;
