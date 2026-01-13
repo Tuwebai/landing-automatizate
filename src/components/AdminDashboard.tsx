@@ -285,9 +285,24 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                 display: 'flex', flexDirection: 'column', padding: '32px 20px',
                 position: 'fixed', height: '100vh', zIndex: 20
             }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '48px', padding: '0 12px' }}>
-                    <div style={{ width: '36px', height: '36px', background: blueGradient, borderRadius: '10px' }} />
-                    <span style={{ fontWeight: 800, fontSize: '1.1rem', color: '#1d1d1f' }}>Automatizate</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '48px', padding: '0 12px' }}>
+                    <img
+                        src="/logo.png"
+                        alt="Logo"
+                        style={{ width: '32px', height: '32px', objectFit: 'contain' }}
+                    />
+                    <span style={{
+                        fontSize: '1.2rem',
+                        fontWeight: 900,
+                        color: '#1d1d1f',
+                        letterSpacing: '-0.02em',
+                        marginLeft: '-6px',
+                        background: 'linear-gradient(45deg, #2079eb, #5fd6fe)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                    }}>
+                        utomatizate
+                    </span>
                 </div>
 
                 <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
@@ -444,51 +459,120 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                             <div style={{ marginBottom: '40px' }}>
                                 <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#1d1d1f', marginBottom: '8px' }}>Llamadas Agendadas</h1>
-                                <p style={{ color: '#64748b', fontSize: '1rem' }}>Listado de prospectos que han reservado una llamada estratégica.</p>
+                                <p style={{ color: '#64748b', fontSize: '1rem' }}>Gestiona tus prospectos como una lista de tareas. Marca las llamadas como completadas para organizarte mejor.</p>
                             </div>
 
-                            <div style={{ display: 'grid', gap: '16px' }}>
-                                {bookings.length > 0 ? bookings.map(booking => (
-                                    <div key={booking.id} style={{
-                                        background: '#fff', padding: '24px', borderRadius: '24px', border: '1px solid #e2e8f0'
-                                    }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
-                                            <div>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#2079eb', fontWeight: 800, fontSize: '0.85rem', textTransform: 'uppercase', marginBottom: '8px' }}>
-                                                    <Calendar size={14} /> {new Date(booking.booking_date).toLocaleDateString()} — {booking.booking_time.slice(0, 5)}hs
-                                                </div>
-                                                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#1d1d1f' }}>{booking.name}</h3>
-                                                <p style={{ color: '#64748b', fontWeight: 500 }}>{booking.business_name}</p>
-                                            </div>
-                                            <div style={{
-                                                padding: '8px 16px', borderRadius: '100px',
-                                                background: booking.has_investment ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)',
-                                                color: booking.has_investment ? '#10b981' : '#ef4444',
-                                                fontSize: '0.8rem', fontWeight: 800
-                                            }}>
-                                                {booking.has_investment ? 'Inversión Confirmada' : 'Sin Inversión'}
-                                            </div>
-                                        </div>
+                            {/* PENDING TABLE */}
+                            <div style={{ marginBottom: '60px' }}>
+                                <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1d1d1f', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <Clock size={20} color="#2079eb" /> Llamadas Pendientes
+                                    <span style={{ fontSize: '0.85rem', background: 'rgba(32,121,235,0.1)', color: '#2079eb', padding: '4px 10px', borderRadius: '100px' }}>
+                                        {bookings.filter(b => b.status !== 'completed').length}
+                                    </span>
+                                </h2>
 
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', borderTop: '1px solid #f1f5f9', paddingTop: '20px' }}>
-                                            <div>
-                                                <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', marginBottom: '4px' }}>Redes Sociales</span>
-                                                <div style={{ color: '#1d1d1f', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                                    <ExternalLink size={14} color="#64748b" /> {booking.social_media || 'N/A'}
+                                <div style={{ display: 'grid', gap: '16px' }}>
+                                    {bookings.filter(b => b.status !== 'completed').length > 0 ? bookings.filter(b => b.status !== 'completed').map(booking => (
+                                        <div key={booking.id} style={{
+                                            background: '#fff', padding: '24px', borderRadius: '24px', border: '1px solid #e2e8f0',
+                                            display: 'flex', gap: '20px', alignItems: 'flex-start'
+                                        }}>
+                                            <button
+                                                onClick={async () => {
+                                                    const { error } = await supabase.from('lndng_calls').update({ status: 'completed' }).eq('id', booking.id);
+                                                    if (!error) setBookings(bookings.map(b => b.id === booking.id ? { ...b, status: 'completed' } : b));
+                                                }}
+                                                style={{
+                                                    width: '24px', height: '24px', borderRadius: '6px', border: '2px solid #e2e8f0',
+                                                    background: 'none', cursor: 'pointer', marginTop: '4px', flexShrink: 0,
+                                                    display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s'
+                                                }}
+                                                onMouseOver={(e) => (e.currentTarget.style.borderColor = '#2079eb')}
+                                                onMouseOut={(e) => (e.currentTarget.style.borderColor = '#e2e8f0')}
+                                            />
+
+                                            <div style={{ flex: 1 }}>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
+                                                    <div>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#2079eb', fontWeight: 800, fontSize: '0.85rem', textTransform: 'uppercase', marginBottom: '8px' }}>
+                                                            <Calendar size={14} /> {new Date(booking.booking_date).toLocaleDateString()} — {booking.booking_time.slice(0, 5)}hs
+                                                        </div>
+                                                        <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#1d1d1f' }}>{booking.name}</h3>
+                                                        <p style={{ color: '#64748b', fontWeight: 500 }}>{booking.business_name}</p>
+                                                    </div>
+                                                    <div style={{
+                                                        padding: '8px 16px', borderRadius: '100px',
+                                                        background: booking.has_investment ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)',
+                                                        color: booking.has_investment ? '#10b981' : '#ef4444',
+                                                        fontSize: '0.8rem', fontWeight: 800
+                                                    }}>
+                                                        {booking.has_investment ? 'Inversión Confirmada' : 'Sin Inversión'}
+                                                    </div>
+                                                </div>
+
+                                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', borderTop: '1px solid #f1f5f9', paddingTop: '20px' }}>
+                                                    <div>
+                                                        <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', marginBottom: '4px' }}>Redes Sociales</span>
+                                                        <div style={{ color: '#1d1d1f', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                            <ExternalLink size={14} color="#64748b" /> {booking.social_media || 'N/A'}
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', marginBottom: '4px' }}>Teléfono</span>
+                                                        <div style={{ color: '#1d1d1f', fontWeight: 600 }}>📲 {booking.phone}</div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div>
-                                                <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', marginBottom: '4px' }}>Teléfono</span>
-                                                <div style={{ color: '#1d1d1f', fontWeight: 600 }}>📲 {booking.phone}</div>
+                                        </div>
+                                    )) : (
+                                        <div style={{ textAlign: 'center', padding: '40px 0', background: 'transparent', borderRadius: '24px', border: '1px dashed #cbd5e1' }}>
+                                            <p style={{ color: '#94a3b8', fontWeight: 600 }}>No hay llamadas pendientes</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* COMPLETED TABLE */}
+                            <div>
+                                <h2 style={{ fontSize: '1rem', fontWeight: 700, color: '#64748b', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    Llamadas Realizadas
+                                    <span style={{ fontSize: '0.75rem', background: '#f1f5f9', color: '#64748b', padding: '2px 8px', borderRadius: '100px' }}>
+                                        {bookings.filter(b => b.status === 'completed').length}
+                                    </span>
+                                </h2>
+
+                                <div style={{ display: 'grid', gap: '12px' }}>
+                                    {bookings.filter(b => b.status === 'completed').length > 0 ? bookings.filter(b => b.status === 'completed').map(booking => (
+                                        <div key={booking.id} style={{
+                                            background: 'rgba(248, 250, 252, 0.5)', padding: '16px 24px', borderRadius: '20px', border: '1px solid #e2e8f0',
+                                            display: 'flex', gap: '16px', alignItems: 'center', opacity: 0.7
+                                        }}>
+                                            <button
+                                                onClick={async () => {
+                                                    const { error } = await supabase.from('lndng_calls').update({ status: 'pending' }).eq('id', booking.id);
+                                                    if (!error) setBookings(bookings.map(b => b.id === booking.id ? { ...b, status: 'pending' } : b));
+                                                }}
+                                                style={{
+                                                    width: '22px', height: '22px', borderRadius: '6px', border: 'none',
+                                                    background: '#10b981', cursor: 'pointer', flexShrink: 0,
+                                                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                                }}
+                                            >
+                                                <Save size={14} color="#fff" />
+                                            </button>
+
+                                            <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                <div>
+                                                    <span style={{ fontWeight: 700, color: '#1d1d1f', marginRight: '12px' }}>{booking.name}</span>
+                                                    <span style={{ fontSize: '0.85rem', color: '#64748b' }}>{booking.business_name} • {new Date(booking.booking_date).toLocaleDateString()}</span>
+                                                </div>
+                                                <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#94a3b8' }}>COMPLETADA</div>
                                             </div>
                                         </div>
-                                    </div>
-                                )) : (
-                                    <div style={{ textAlign: 'center', padding: '80px 0', background: '#fff', borderRadius: '24px', border: '1px dashed #cbd5e1' }}>
-                                        <Users size={48} color="#cbd5e1" style={{ marginBottom: '16px' }} />
-                                        <p style={{ color: '#94a3b8', fontWeight: 600 }}>No hay llamadas agendadas todavía</p>
-                                    </div>
-                                )}
+                                    )) : (
+                                        <p style={{ color: '#94a3b8', fontSize: '0.9rem', fontStyle: 'italic', textAlign: 'center' }}>No has marcado ninguna llamada como realizada todavía</p>
+                                    )}
+                                </div>
                             </div>
                         </motion.div>
                     )}
