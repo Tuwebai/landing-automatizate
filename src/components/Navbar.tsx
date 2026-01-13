@@ -10,13 +10,19 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
     const [scrolled, setScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
 
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 50);
         };
+        const handleResize = () => setWindowWidth(window.innerWidth);
         window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
     const navLinks = [
@@ -88,7 +94,7 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
 
                 {/* Desktop Links Section - Hidden on mobile */}
                 <div style={{
-                    display: window.innerWidth > 968 ? 'flex' : 'none',
+                    display: windowWidth > 968 ? 'flex' : 'none',
                     gap: '40px',
                     alignItems: 'center',
                     marginLeft: 'auto'
@@ -144,7 +150,7 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                         setIsMenuOpen(!isMenuOpen);
                     }}
                     style={{
-                        display: window.innerWidth <= 968 ? 'flex' : 'none',
+                        display: windowWidth <= 968 ? 'flex' : 'none',
                         cursor: 'pointer',
                         padding: '10px',
                         zIndex: 1010, // Above overlay
@@ -177,10 +183,10 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                             }}
                         />
                         <motion.div
-                            initial={{ x: '100%' }}
+                            initial={windowWidth > 968 ? { x: '100%' } : { x: 0 }}
                             animate={{ x: 0 }}
-                            exit={{ x: '100%' }}
-                            transition={{ type: 'tween', duration: 0.3, ease: 'easeOut' }}
+                            exit={windowWidth > 968 ? { x: '100%' } : { x: 0, opacity: 0 }}
+                            transition={windowWidth > 968 ? { type: 'tween', duration: 0.3, ease: 'easeOut' } : { duration: 0 }}
                             style={{
                                 position: 'fixed',
                                 top: 0,
@@ -193,11 +199,25 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                                 zIndex: 1000,
                                 display: 'flex',
                                 flexDirection: 'column',
-                                padding: '80px 40px',
+                                padding: '40px',
                                 gap: '30px',
                                 willChange: 'transform'
                             }}
                         >
+                            {/* Inner Close Button for Mobile */}
+                            <div
+                                onClick={() => setIsMenuOpen(false)}
+                                style={{
+                                    alignSelf: 'flex-end',
+                                    padding: '10px',
+                                    cursor: 'pointer',
+                                    color: '#1d1d1f',
+                                    marginBottom: '10px'
+                                }}
+                            >
+                                <X size={32} />
+                            </div>
+
                             {navLinks.map((link) => (
                                 <motion.button
                                     key={link.name}

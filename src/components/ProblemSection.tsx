@@ -21,6 +21,13 @@ const ProblemSection: React.FC = () => {
 
     const [visibleNews, setVisibleNews] = useState<any[]>([]);
     const [newsCounter, setNewsCounter] = useState(0);
+    const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+    useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const gradientStyle = {
         background: 'linear-gradient(45deg, #5fd6fe, #2079eb)',
@@ -104,22 +111,22 @@ const ProblemSection: React.FC = () => {
                             {visibleNews.map((item, idx) => (
                                 <motion.div
                                     key={`${item.text}-${newsCounter - idx}`}
-                                    initial={{ opacity: 0, x: 50, scale: 0.95 }}
+                                    initial={windowWidth > 968 ? { opacity: 0, x: 50, scale: 0.95 } : { opacity: 0 }}
                                     animate={{
                                         opacity: 1 - idx * 0.3,
                                         y: idx * 40,
                                         z: -idx * 40,
                                         scale: 1 - idx * 0.05,
-                                        filter: 'none' // REMOVED BLUR for performance
+                                        filter: 'none'
                                     }}
-                                    exit={{ opacity: 0, x: -100, scale: 0.9, transition: { duration: 0.2 } }}
-                                    transition={{ type: 'spring', stiffness: 200, damping: 25 }}
+                                    exit={windowWidth > 968 ? { opacity: 0, x: -100, scale: 0.9, transition: { duration: 0.2 } } : { opacity: 0, transition: { duration: 0 } }}
+                                    transition={windowWidth > 968 ? { type: 'spring', stiffness: 200, damping: 25 } : { duration: 0 }}
                                     style={{
                                         position: 'absolute',
-                                        width: '90%', // Better responsive width
+                                        width: '90%',
                                         maxWidth: '440px',
                                         left: '50%',
-                                        x: '-50%', // Perfect centering
+                                        transform: 'translateX(-50%)', // Robust CSS centering
                                         background: '#ffffff',
                                         padding: '20px',
                                         borderRadius: '24px',
