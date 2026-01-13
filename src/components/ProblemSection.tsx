@@ -111,22 +111,22 @@ const ProblemSection: React.FC = () => {
                             {visibleNews.map((item, idx) => (
                                 <motion.div
                                     key={`${item.text}-${newsCounter - idx}`}
-                                    initial={windowWidth > 968 ? { opacity: 0, x: 50, scale: 0.95 } : { opacity: 0 }}
+                                    initial={windowWidth > 968 ? { opacity: 0, x: "calc(-50% + 50px)", scale: 0.95 } : { opacity: 0, x: "-50%" }}
                                     animate={{
                                         opacity: 1 - idx * 0.3,
                                         y: idx * 40,
                                         z: -idx * 40,
+                                        x: "-50%", // ALWAYS TARGET CENTER
                                         scale: 1 - idx * 0.05,
                                         filter: 'none'
                                     }}
-                                    exit={windowWidth > 968 ? { opacity: 0, x: -100, scale: 0.9, transition: { duration: 0.2 } } : { opacity: 0, transition: { duration: 0 } }}
+                                    exit={windowWidth > 968 ? { opacity: 0, x: "-60%", scale: 0.9, transition: { duration: 0.2 } } : { opacity: 0, transition: { duration: 0 } }}
                                     transition={windowWidth > 968 ? { type: 'spring', stiffness: 200, damping: 25 } : { duration: 0 }}
                                     style={{
                                         position: 'absolute',
                                         width: '90%',
                                         maxWidth: '440px',
                                         left: '50%',
-                                        transform: 'translateX(-50%)', // Robust CSS centering
                                         background: '#ffffff',
                                         padding: '20px',
                                         borderRadius: '24px',
