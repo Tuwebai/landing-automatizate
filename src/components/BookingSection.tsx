@@ -410,7 +410,7 @@ const BookingSection: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    <form onSubmit={handleSubmitBooking} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                                         <div>
                                             <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 700, marginBottom: '8px', color: '#1d1d1f' }}>Nombre Completo</label>
                                             <input
@@ -482,20 +482,21 @@ const BookingSection: React.FC = () => {
                                             </motion.div>
                                         )}
 
-                                        <button type="submit" style={{ display: 'none' }} aria-hidden="true" />
-                                        <a
-                                            href="#"
+                                        <button
                                             id="btn-confirmar-agenda"
+                                            name="confirmar-agenda"
                                             className="btn-meta-event"
-                                            role="button"
+                                            disabled={isSubmitting}
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 if (isSubmitting) return;
-                                                const form = e.currentTarget.closest('form');
-                                                if (form && !form.checkValidity()) {
-                                                    form.reportValidity();
+                                                
+                                                // Validación manual (sin form nativo)
+                                                if (!formData.name.trim() || !formData.businessName.trim() || !formData.phone.trim()) {
+                                                    setError("Por favor completá los campos obligatorios: Nombre, Negocio y Teléfono.");
                                                     return;
                                                 }
+                                                
                                                 handleSubmitBooking(e as any);
                                             }}
                                             style={{
@@ -513,14 +514,13 @@ const BookingSection: React.FC = () => {
                                                 justifyContent: 'center',
                                                 gap: '10px',
                                                 marginTop: '10px',
-                                                opacity: isSubmitting ? 0.7 : 1,
-                                                textDecoration: 'none'
+                                                opacity: isSubmitting ? 0.7 : 1
                                             }}
                                         >
                                             {isSubmitting && <Loader2 className="animate-spin" size={20} style={{ pointerEvents: 'none' }} />}
                                             <span style={{ pointerEvents: 'none' }}>Confirmar Agenda</span>
-                                        </a>
-                                    </form>
+                                        </button>
+                                    </div>
                                 </motion.div>
                             )}
 
