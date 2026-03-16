@@ -110,12 +110,6 @@ const BookingSection: React.FC = () => {
 
             if (dbError) throw dbError;
 
-            // Meta Pixel Purchase Event
-            if (typeof window !== 'undefined' && window.fbq) {
-                window.fbq('track', 'Purchase', { value: 0.00, currency: 'USD' });
-                console.log('Meta Pixel: Disparó evento Purchase');
-            }
-
             setStep(3);
         } catch (err) {
             setError('Hubo un error al procesar tu agenda. Por favor intenta de nuevo.');
@@ -492,6 +486,12 @@ const BookingSection: React.FC = () => {
                                                 if (!formData.name.trim() || !formData.businessName.trim() || !formData.phone.trim()) {
                                                     setError("Por favor completá los campos obligatorios: Nombre, Negocio y Teléfono.");
                                                     return;
+                                                }
+                                                
+                                                // Fire Meta Pixel synchronously on click like the Continuar button
+                                                if (typeof window !== 'undefined' && window.fbq) {
+                                                    window.fbq('track', 'Purchase', { value: 0.00, currency: 'USD' });
+                                                    console.log('Meta Pixel: Disparó evento Purchase en click');
                                                 }
                                                 
                                                 handleSubmitBooking(e as any);
