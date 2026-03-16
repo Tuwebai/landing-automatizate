@@ -483,13 +483,14 @@ const BookingSection: React.FC = () => {
                                         )}
 
                                         <button type="submit" style={{ display: 'none' }} aria-hidden="true" />
-                                        <button
+                                        <a
+                                            href="#"
                                             id="btn-confirmar-agenda"
-                                            name="confirmar-agenda"
                                             className="btn-meta-event"
-                                            type="button"
-                                            disabled={isSubmitting}
+                                            role="button"
                                             onClick={(e) => {
+                                                e.preventDefault();
+                                                if (isSubmitting) return;
                                                 const form = e.currentTarget.closest('form');
                                                 if (form && !form.checkValidity()) {
                                                     form.reportValidity();
@@ -512,12 +513,13 @@ const BookingSection: React.FC = () => {
                                                 justifyContent: 'center',
                                                 gap: '10px',
                                                 marginTop: '10px',
-                                                opacity: isSubmitting ? 0.7 : 1
+                                                opacity: isSubmitting ? 0.7 : 1,
+                                                textDecoration: 'none'
                                             }}
                                         >
                                             {isSubmitting && <Loader2 className="animate-spin" size={20} style={{ pointerEvents: 'none' }} />}
                                             <span style={{ pointerEvents: 'none' }}>Confirmar Agenda</span>
-                                        </button>
+                                        </a>
                                     </form>
                                 </motion.div>
                             )}
