@@ -327,11 +327,16 @@ const BookingSection: React.FC = () => {
                                             </div>
 
                                             {selectedTime && (
-                                                <motion.button
+                                                <button
                                                     id="btn-continuar-agenda"
-                                                    initial={{ opacity: 0, y: 10 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    onClick={() => setStep(2)}
+                                                    name="continuar-agenda"
+                                                    className="btn-meta-event"
+                                                    onClick={() => {
+                                                        if (window.fbq) {
+                                                            window.fbq('track', 'InitiateCheckout');
+                                                        }
+                                                        setStep(2);
+                                                    }}
                                                     style={{
                                                         width: '100%',
                                                         marginTop: '32px',
@@ -346,11 +351,13 @@ const BookingSection: React.FC = () => {
                                                         display: 'flex',
                                                         alignItems: 'center',
                                                         justifyContent: 'center',
-                                                        gap: '8px'
+                                                        gap: '8px',
+                                                        animation: 'fadeIn 0.3s ease-out'
                                                     }}
                                                 >
-                                                    Continuar <ArrowRight size={20} />
-                                                </motion.button>
+                                                    <span style={{ pointerEvents: 'none' }}>Continuar</span>
+                                                    <ArrowRight size={20} style={{ pointerEvents: 'none' }} />
+                                                </button>
                                             )}
                                         </motion.div>
                                     )}
@@ -477,6 +484,8 @@ const BookingSection: React.FC = () => {
 
                                         <button
                                             id="btn-confirmar-agenda"
+                                            name="confirmar-agenda"
+                                            className="btn-meta-event"
                                             type="submit"
                                             disabled={isSubmitting}
                                             style={{
@@ -497,7 +506,10 @@ const BookingSection: React.FC = () => {
                                                 opacity: isSubmitting ? 0.7 : 1
                                             }}
                                         >
-                                            {isSubmitting ? <Loader2 className="animate-spin" size={20} /> : 'Confirmar Agenda'}
+                                            <span style={{ pointerEvents: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                                {isSubmitting && <Loader2 className="animate-spin" size={20} />}
+                                                Confirmar Agenda
+                                            </span>
                                         </button>
                                     </form>
                                 </motion.div>
@@ -643,6 +655,11 @@ const BookingSection: React.FC = () => {
                                 href="https://wa.me/+5492216793522"
                                 target="_blank"
                                 rel="noopener noreferrer"
+                                onClick={() => {
+                                    if (window.fbq) {
+                                        window.fbq('track', 'Contact');
+                                    }
+                                }}
                                 style={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
