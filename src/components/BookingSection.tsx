@@ -110,9 +110,9 @@ const BookingSection: React.FC = () => {
 
             if (dbError) throw dbError;
 
-            // Meta Pixel Lead Event
+            // Meta Pixel Purchase Event
             if (window.fbq) {
-                window.fbq('track', 'Lead');
+                window.fbq('track', 'Purchase', { value: 0.00, currency: 'USD' });
             }
 
             setStep(3);
