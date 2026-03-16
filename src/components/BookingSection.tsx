@@ -328,6 +328,7 @@ const BookingSection: React.FC = () => {
 
                                             {selectedTime && (
                                                 <motion.button
+                                                    id="btn-continuar-agenda"
                                                     initial={{ opacity: 0, y: 10 }}
                                                     animate={{ opacity: 1, y: 0 }}
                                                     onClick={() => setStep(2)}
@@ -475,6 +476,7 @@ const BookingSection: React.FC = () => {
                                         )}
 
                                         <button
+                                            id="btn-confirmar-agenda"
                                             type="submit"
                                             disabled={isSubmitting}
                                             style={{
@@ -637,6 +639,7 @@ const BookingSection: React.FC = () => {
                                 ¿No encontrás un horario disponible o preferís hablar por otro medio?
                             </p>
                             <a
+                                id="btn-whatsapp-contact"
                                 href="https://wa.me/+5492216793522"
                                 target="_blank"
                                 rel="noopener noreferrer"
