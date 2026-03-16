@@ -482,12 +482,21 @@ const BookingSection: React.FC = () => {
                                             </motion.div>
                                         )}
 
+                                        <button type="submit" style={{ display: 'none' }} aria-hidden="true" />
                                         <button
                                             id="btn-confirmar-agenda"
                                             name="confirmar-agenda"
                                             className="btn-meta-event"
-                                            type="submit"
+                                            type="button"
                                             disabled={isSubmitting}
+                                            onClick={(e) => {
+                                                const form = e.currentTarget.closest('form');
+                                                if (form && !form.checkValidity()) {
+                                                    form.reportValidity();
+                                                    return;
+                                                }
+                                                handleSubmitBooking(e as any);
+                                            }}
                                             style={{
                                                 width: '100%',
                                                 background: blueGradient,
@@ -506,10 +515,8 @@ const BookingSection: React.FC = () => {
                                                 opacity: isSubmitting ? 0.7 : 1
                                             }}
                                         >
-                                            <span style={{ pointerEvents: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                                {isSubmitting && <Loader2 className="animate-spin" size={20} />}
-                                                Confirmar Agenda
-                                            </span>
+                                            {isSubmitting && <Loader2 className="animate-spin" size={20} style={{ pointerEvents: 'none' }} />}
+                                            <span style={{ pointerEvents: 'none' }}>Confirmar Agenda</span>
                                         </button>
                                     </form>
                                 </motion.div>
