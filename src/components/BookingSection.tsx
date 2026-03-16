@@ -111,8 +111,9 @@ const BookingSection: React.FC = () => {
             if (dbError) throw dbError;
 
             // Meta Pixel Purchase Event
-            if (window.fbq) {
+            if (typeof window !== 'undefined' && window.fbq) {
                 window.fbq('track', 'Purchase', { value: 0.00, currency: 'USD' });
+                console.log('Meta Pixel: Disparó evento Purchase');
             }
 
             setStep(3);
@@ -329,8 +330,6 @@ const BookingSection: React.FC = () => {
                                             {selectedTime && (
                                                 <button
                                                     id="btn-continuar-agenda"
-                                                    name="continuar-agenda"
-                                                    className="btn-meta-event"
                                                     onClick={() => {
                                                         if (window.fbq) {
                                                             window.fbq('track', 'InitiateCheckout');
@@ -484,8 +483,6 @@ const BookingSection: React.FC = () => {
 
                                         <button
                                             id="btn-confirmar-agenda"
-                                            name="confirmar-agenda"
-                                            className="btn-meta-event"
                                             disabled={isSubmitting}
                                             onClick={(e) => {
                                                 e.preventDefault();
