@@ -18,11 +18,19 @@ const BookingSection: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
+    const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+    const [hasLocalBooking, setHasLocalBooking] = useState(false);
     const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
 
     useEffect(() => {
         const handleResize = () => setWindowWidth(window.innerWidth);
         window.addEventListener('resize', handleResize);
+        
+        // Verifica si ya tiene agenda en este navegador
+        if (typeof window !== 'undefined' && localStorage.getItem('has_booked_automatizate')) {
+            setHasLocalBooking(true);
+        }
+        
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
@@ -66,10 +74,36 @@ const BookingSection: React.FC = () => {
         }
     };
 
-    const handleDateSelect = (day: number) => {
+    const fetchBookedSlotsForDate = async (date: Date) => {
+        setIsLoading(true);
+        try {
+            const dateStr = date.toISOString().split('T')[0];
+            const { data, error } = await supabase
+                .from('lndng_calls')
+                .select('booking_time')
+                .eq('booking_date', dateStr);
+
+            if (error) throw error;
+            
+            // Extraer solo los horarios un array
+            if (data) {
+                setBookedSlots(data.map(call => call.booking_time));
+            } else {
+                setBookedSlots([]);
+            }
+        } catch (err) {
+            console.error('Error fetching booked slots:', err);
+            setBookedSlots([]); // Por si falla, asumimos libre (o podes manejarlo distinto)
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleDateSelect = async (day: number) => {
         const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
         setSelectedDate(date);
         setSelectedTime(null);
+        await fetchBookedSlotsForDate(date);
     };
 
     const isDateAvailable = (day: number) => {
@@ -82,20 +116,48 @@ const BookingSection: React.FC = () => {
     const getDaySlots = () => {
         if (!selectedDate || !availability) return [];
         const dayName = daysOfWeek[selectedDate.getDay()];
-        return availability[dayName]?.slots || [];
+        const allSlots = availability[dayName]?.slots || [];
+        
+        // Retorna solo los horarios que NO están en bookedSlots
+        return allSlots.filter((slot: string) => !bookedSlots.includes(slot));
     };
 
     const handleSubmitBooking = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
 
+        if (hasLocalBooking) {
+            setError('Ya tenés una llamada agendada desde este dispositivo. Si querés modificarla, contactate con soporte.');
+            return;
+        }
+
         if (!formData.hasInvestment) {
             setError('Lo sentimos, se requiere contar con la inversión mínima especificada para agendar esta llamada estratégica.');
             return;
         }
 
+        if (!selectedDate || !selectedTime) {
+            setError('Por favor seleccioná una fecha y horario para continuar.');
+            return;
+        }
+
         setIsSubmitting(true);
         try {
+            // Check Si el telefono ya reservo:
+            const { data: existingCalls, error: phoneError } = await supabase
+                .from('lndng_calls')
+                .select('id')
+                .eq('phone', formData.phone)
+                .limit(1);
+
+            if (phoneError) {
+                console.error("Error validando duplicados:", phoneError);
+            } else if (existingCalls && existingCalls.length > 0) {
+                setError('El número de teléfono provisto ya tiene una asesoría programada agendada. Contactate con nosotros si hubo un error.');
+                setIsSubmitting(false);
+                return;
+            }
+
             const { error: dbError } = await supabase
                 .from('lndng_calls')
                 .insert({
@@ -109,6 +171,12 @@ const BookingSection: React.FC = () => {
                 });
 
             if (dbError) throw dbError;
+
+            // Guardar localmente que ya agendó
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('has_booked_automatizate', 'true');
+                setHasLocalBooking(true);
+            }
 
             setStep(3);
         } catch (err) {
