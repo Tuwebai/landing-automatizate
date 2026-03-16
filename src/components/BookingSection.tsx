@@ -116,10 +116,7 @@ const BookingSection: React.FC = () => {
     const getDaySlots = () => {
         if (!selectedDate || !availability) return [];
         const dayName = daysOfWeek[selectedDate.getDay()];
-        const allSlots = availability[dayName]?.slots || [];
-        
-        // Retorna solo los horarios que NO están en bookedSlots
-        return allSlots.filter((slot: string) => !bookedSlots.includes(slot));
+        return availability[dayName]?.slots || [];
     };
 
     const handleSubmitBooking = async (e: React.FormEvent) => {
@@ -367,24 +364,30 @@ const BookingSection: React.FC = () => {
                                                 Horarios disponibles para el {selectedDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}:
                                             </h4>
                                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '12px' }}>
-                                                {getDaySlots().length > 0 ? getDaySlots().map((slot: string) => (
-                                                    <button
-                                                        key={slot}
-                                                        onClick={() => setSelectedTime(slot)}
-                                                        style={{
-                                                            padding: '12px',
-                                                            borderRadius: '10px',
-                                                            border: selectedTime === slot ? '2px solid #2079eb' : '1px solid #e2e8f0',
-                                                            background: selectedTime === slot ? 'rgba(32,121,235,0.05)' : '#fff',
-                                                            color: selectedTime === slot ? '#2079eb' : '#64748b',
-                                                            fontWeight: 700,
-                                                            cursor: 'pointer',
-                                                            transition: 'all 0.2s'
-                                                        }}
-                                                    >
-                                                        {slot}
-                                                    </button>
-                                                )) : (
+                                                {getDaySlots().length > 0 ? getDaySlots().map((slot: string) => {
+                                                    const isBooked = bookedSlots.includes(slot);
+                                                    return (
+                                                        <button
+                                                            key={slot}
+                                                            onClick={() => !isBooked && setSelectedTime(slot)}
+                                                            disabled={isBooked}
+                                                            style={{
+                                                                padding: '12px',
+                                                                borderRadius: '10px',
+                                                                border: selectedTime === slot ? '2px solid #2079eb' : (isBooked ? '1px solid #f1f5f9' : '1px solid #e2e8f0'),
+                                                                background: selectedTime === slot ? 'rgba(32,121,235,0.05)' : (isBooked ? '#f8fafc' : '#fff'),
+                                                                color: selectedTime === slot ? '#2079eb' : (isBooked ? '#cbd5e1' : '#64748b'),
+                                                                fontWeight: 700,
+                                                                cursor: isBooked ? 'not-allowed' : 'pointer',
+                                                                textDecoration: isBooked ? 'line-through' : 'none',
+                                                                transition: 'all 0.2s',
+                                                                opacity: isBooked ? 0.7 : 1
+                                                            }}
+                                                        >
+                                                            {slot}
+                                                        </button>
+                                                    );
+                                                }) : (
                                                     <p style={{ gridColumn: '1/-1', color: '#94a3b8', fontSize: '0.9rem', fontStyle: 'italic' }}>No hay horarios configurados para este día.</p>
                                                 )}
                                             </div>
