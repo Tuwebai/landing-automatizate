@@ -3,6 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar as CalendarIcon, ArrowRight, UserCheck, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
+declare global {
+    interface Window {
+        fbq: any;
+    }
+}
+
 const BookingSection: React.FC = () => {
     // States
     const [availability, setAvailability] = useState<any>(null);
@@ -103,6 +109,12 @@ const BookingSection: React.FC = () => {
                 });
 
             if (dbError) throw dbError;
+
+            // Meta Pixel Lead Event
+            if (window.fbq) {
+                window.fbq('track', 'Lead');
+            }
+
             setStep(3);
         } catch (err) {
             setError('Hubo un error al procesar tu agenda. Por favor intenta de nuevo.');
