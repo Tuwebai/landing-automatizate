@@ -77,7 +77,12 @@ const BookingSection: React.FC = () => {
     const fetchBookedSlotsForDate = async (date: Date) => {
         setIsLoading(true);
         try {
-            const dateStr = date.toISOString().split('T')[0];
+            // Generar string de fecha local YYYY-MM-DD sin errores de zona horaria
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const dateStr = `${year}-${month}-${day}`;
+
             const { data, error } = await supabase
                 .from('lndng_calls')
                 .select('booking_time')
@@ -85,15 +90,15 @@ const BookingSection: React.FC = () => {
 
             if (error) throw error;
             
-            // Extraer solo los horarios un array
+            // Importante: La BD puede devolver "14:00:00". Comparamos solo los primeros 5 caracteres.
             if (data) {
-                setBookedSlots(data.map(call => call.booking_time));
+                setBookedSlots(data.map(call => call.booking_time.substring(0, 5)));
             } else {
                 setBookedSlots([]);
             }
         } catch (err) {
             console.error('Error fetching booked slots:', err);
-            setBookedSlots([]); // Por si falla, asumimos libre (o podes manejarlo distinto)
+            setBookedSlots([]);
         } finally {
             setIsLoading(false);
         }
@@ -155,10 +160,15 @@ const BookingSection: React.FC = () => {
                 return;
             }
 
+            const year = selectedDate.getFullYear();
+            const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+            const day = String(selectedDate.getDate()).padStart(2, '0');
+            const dateStr = `${year}-${month}-${day}`;
+
             const { error: dbError } = await supabase
                 .from('lndng_calls')
                 .insert({
-                    booking_date: selectedDate?.toISOString().split('T')[0],
+                    booking_date: dateStr,
                     booking_time: selectedTime,
                     name: formData.name,
                     business_name: formData.businessName,
