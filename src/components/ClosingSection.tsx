@@ -97,7 +97,7 @@ const ClosingSection: React.FC = () => {
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
                             fontWeight: 900
-                        }}>$1,000 USD al mes.</span>{' '}
+                        }}>$997 USD al mes.</span>{' '}
                         <span style={{ fontWeight: 800, color: '#1d1d1f' }}>Esta inversión fija</span> te permite{' '}
                         <span style={{
                             background: blueGradient,

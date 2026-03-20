@@ -11,11 +11,18 @@ const SERVICES = [
         color: '#5fd6fe'
     },
     {
-        title: 'Sistemas Completos',
+        title: 'Automatizaciones Completas',
         subtitle: 'Eficiencia Operativa',
         description: 'Desde atención al cliente las 24 horas, hasta sistemas para agilizar flujos internos y eliminar el error humano.',
         image: '/service-systems.jpg',
         color: '#2079eb'
+    },
+    {
+        title: 'Paginas web a medida',
+        subtitle: 'Presencia & Conversion',
+        description: 'Disenamos sitios web pensados para la imagen de tu negocio, tu oferta y tus objetivos comerciales, con una experiencia alineada a tu marca.',
+        image: '/service-software.jpg',
+        color: '#5fd6fe'
     },
     {
         title: 'Lo que tus redes necesitan',
@@ -231,8 +238,8 @@ const ServicesSection: React.FC = () => {
                                     style={{
                                         width: '100%',
                                         height: '100%',
-                                        objectFit: index === 4 ? 'contain' : 'cover',
-                                        padding: index === 4 ? '20px' : '0',
+                                        objectFit: service.title === 'EvoluciÃ³n sin lÃ­mites' ? 'contain' : 'cover',
+                                        padding: service.title === 'EvoluciÃ³n sin lÃ­mites' ? '20px' : '0',
                                         objectPosition: 'center'
                                     }}
                                 />

@@ -256,7 +256,7 @@ const BookingSection: React.FC = () => {
                             lineHeight: 1.6
                         }}
                     >
-                        Selecciona un horario para tu llamada estratégica (Duración: 1 hora)
+                        Selecciona un horario para tu llamada estratégica
                     </motion.p>
 
                     {windowWidth <= 968 && (
@@ -640,6 +640,7 @@ const BookingSection: React.FC = () => {
 
                     {/* Side Info */}
                     <div style={{ flex: '0.8', maxWidth: '450px' }}>
+                        {windowWidth > 968 && (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
                             <div style={{ display: 'flex', gap: '20px' }}>
                                 <div style={{
@@ -650,7 +651,7 @@ const BookingSection: React.FC = () => {
                                 }}>1</div>
                                 <div>
                                     <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1d1d1f', marginBottom: '8px' }}>Primera llamada: Nos conocemos a fondo</h4>
-                                    <p style={{ color: '#666', lineHeight: 1.5, fontSize: '0.9rem' }}>Evaluamos tu modelo de negocio, te presentamos a nuestro equipo de I+D y definimos cómo Automatizate potenciará tu empresa. En esta fase se realiza la reserva del cupo mediante la seña del 50% (500 USD).</p>
+                                    <p style={{ color: '#666', lineHeight: 1.5, fontSize: '0.9rem' }}>Evaluamos tu modelo de negocio, te presentamos a nuestro equipo de I+D y definimos cómo Automatizate potenciará tu empresa. En esta fase se realiza la reserva del cupo mediante la seña del 50% (498 USD).</p>
                                 </div>
                             </div>
 
@@ -669,6 +670,7 @@ const BookingSection: React.FC = () => {
                                 </div>
                             </div>
                         </div>
+                        )}
 
                         {/* Progress Bar / Availability Urgency - Hidden on Mobile (moved up) */}
                         {windowWidth > 968 && (

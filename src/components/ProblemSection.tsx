@@ -2,14 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 
 const AI_NEWS = [
-    { company: 'OpenAI', text: 'Vista previa de ChatGPT-5 lanzada', color: '#10a37f' },
-    { company: 'Google', text: 'Gemini 1.5 Ultra supera los benchmarks', color: '#4285f4' },
-    { company: 'Anthropic', text: 'Claude 3.5 Sonnet alcanza nivel humano en programación', color: '#d97757' },
-    { company: 'xAI', text: 'Grok-2 integrado en datos de X en tiempo real', color: '#000000' },
-    { company: 'Meta', text: 'Llama 4 entrenando en 1 millón de H100s', color: '#0668E1' },
-    { company: 'Mistral', text: 'Mistral Large 2 bate récords en Pesos Abiertos', color: '#f5d142' },
-    { company: 'NVIDIA', text: 'Proyecto G-Assist revoluciona la IA en juegos', color: '#76b900' },
-    { company: 'Apple', text: 'Modelos locales de Apple Intelligence optimizados', color: '#555555' },
+    { company: 'OpenAI', text: 'GPT-5.4 Thinking y GPT-5.4 Pro ya corren en ChatGPT, API y Codex', color: '#10a37f' },
+    { company: 'Google', text: 'Gemini 2.5 Pro y 3.1 Pro lideran flujos con razonamiento y contexto largo', color: '#4285f4' },
+    { company: 'Anthropic', text: 'Claude Code y Claude 4.6 se enfocan en automatizacion agentica', color: '#d97757' },
+    { company: 'Meta', text: 'Llama sigue siendo la base open source para despliegues empresariales', color: '#0668E1' },
+    { company: 'Mistral', text: 'Mistral Large mantiene la presion en inferencia eficiente y edge', color: '#f5d142' },
+    { company: 'NVIDIA', text: 'Blackwell y el stack de inferencia aceleran la adopcion en produccion', color: '#76b900' },
+    { company: 'Apple', text: 'Apple Intelligence refuerza la capa on-device con modelos locales', color: '#555555' },
+    { company: 'xAI', text: 'Grok se integra en workflows en tiempo real y busquedas asistidas', color: '#000000' },
 ];
 
 const ProblemSection: React.FC = () => {
@@ -262,3 +262,5 @@ const ProblemSection: React.FC = () => {
 };
 
 export default ProblemSection;
+
+

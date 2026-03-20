@@ -127,8 +127,8 @@ const CaseStudySection: React.FC<CaseStudySectionProps> = ({ mode, onNavigate, o
                         }}
                         style={{
                             background: '#ffffff',
-                            borderRadius: '32px',
-                            padding: windowWidth > 768 ? '45px 35px' : '30px 20px',
+                            borderRadius: windowWidth > 768 ? '32px' : '24px',
+                            padding: windowWidth > 768 ? '45px 35px' : '22px 16px',
                             border: '1px solid rgba(0,0,0,0.06)',
                             boxShadow: '0 20px 50px rgba(0,0,0,0.03)',
                             cursor: 'pointer',
@@ -139,20 +139,20 @@ const CaseStudySection: React.FC<CaseStudySectionProps> = ({ mode, onNavigate, o
                         <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
                             <div style={{
                                 background: 'rgba(32,121,235,0.05)',
-                                padding: '10px 20px',
+                                padding: windowWidth > 768 ? '10px 20px' : '8px 14px',
                                 borderRadius: '100px',
                                 color: '#2079eb',
-                                fontSize: '0.85rem',
+                                fontSize: windowWidth > 768 ? '0.85rem' : '0.72rem',
                                 fontWeight: 700,
-                                marginBottom: '20px'
+                                marginBottom: windowWidth > 768 ? '20px' : '14px'
                             }}>
                                 LOGÍSTICA
                             </div>
-                            <h3 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#1d1d1f', marginBottom: '16px', lineHeight: 1.2 }}>
-                                Como NovaFlex pudo escalar su negocio a un x2 trabajando con Automatizate
+                            <h3 style={{ fontSize: windowWidth > 768 ? '1.8rem' : '1.28rem', fontWeight: 800, color: '#1d1d1f', marginBottom: windowWidth > 768 ? '16px' : '12px', lineHeight: 1.2 }}>
+                                Como NovaFlex aumento 42% su capacidad operativa sin sumar personal
                             </h3>
-                            <p style={{ fontSize: '1.05rem', color: '#666', lineHeight: 1.6, maxWidth: '600px', marginBottom: '28px' }}>
-                                Desde procesos 100% manuales, hasta sistemas donde se automatizaron más de la mitad de las tareas repetitivas del negocio. Gracias a ello pudieron escalar.
+                            <p style={{ fontSize: windowWidth > 768 ? '1.05rem' : '0.9rem', color: '#666', lineHeight: 1.55, maxWidth: '600px', marginBottom: windowWidth > 768 ? '28px' : '20px' }}>
+                                Desde procesos 100% manuales, hasta sistemas donde se automatizaron y agilizaron más de la mitad de las tareas repetitivas del negocio. Gracias a ello pudieron escalar +40% con los mismos empleados.
                             </p>
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
@@ -161,18 +161,18 @@ const CaseStudySection: React.FC<CaseStudySectionProps> = ({ mode, onNavigate, o
                                     background: 'linear-gradient(45deg, #5fd6fe, #2079eb)',
                                     color: 'white',
                                     border: 'none',
-                                    padding: '16px 32px',
+                                    padding: windowWidth > 768 ? '16px 32px' : '13px 22px',
                                     borderRadius: '100px',
-                                    fontSize: '0.95rem',
+                                    fontSize: windowWidth > 768 ? '0.95rem' : '0.85rem',
                                     fontWeight: 700,
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '12px',
+                                    gap: windowWidth > 768 ? '12px' : '9px',
                                     cursor: 'pointer',
                                     boxShadow: '0 8px 20px rgba(32, 121, 235, 0.2)'
                                 }}
                             >
-                                Ver a detalle <ArrowRight size={18} />
+                                Ver a detalle <ArrowRight size={windowWidth > 768 ? 18 : 16} />
                             </motion.button>
                         </div>
 
@@ -199,7 +199,7 @@ const CaseStudySection: React.FC<CaseStudySectionProps> = ({ mode, onNavigate, o
                 <motion.button
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    onClick={() => onBack?.()}
+                    onClick={() => onBack?.('investment-section')}
                     style={{
                         display: 'flex',
                         alignItems: 'center',
