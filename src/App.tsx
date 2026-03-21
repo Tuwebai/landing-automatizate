@@ -5,6 +5,7 @@ import ServicesSection from './components/ServicesSection'
 import CaseStudySection from './components/CaseStudySection'
 import ClosingSection from './components/ClosingSection'
 import BookingSection from './components/BookingSection'
+import PostCallSection from './components/PostCallSection'
 import Footer from './components/Footer'
 import AdminLogin from './components/AdminLogin'
 import AdminDashboard from './components/AdminDashboard'
@@ -56,6 +57,7 @@ function App() {
           <CaseStudySection mode="preview" onNavigate={() => setView('case-study')} />
           <ClosingSection />
           <BookingSection />
+          <PostCallSection />
           <Footer onAdminClick={() => setView('admin-login')} onNavigate={scrollToSection} />
         </>
       ) : view === 'case-study' ? (

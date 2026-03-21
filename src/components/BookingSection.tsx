@@ -49,7 +49,6 @@ const BookingSection: React.FC = () => {
         WebkitTextFillColor: 'transparent' as const,
         display: 'inline-block' as const
     };
-
     const daysOfWeek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const currentMonth = new Date();
     const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate();
@@ -781,15 +780,6 @@ const BookingSection: React.FC = () => {
             </div>
 
             {/* Decorative Background Blobs */}
-            <div style={{
-                position: 'absolute',
-                top: '10%',
-                right: '-5%',
-                width: '400px',
-                height: '400px',
-                background: 'radial-gradient(circle, rgba(32,121,235,0.02) 0%, transparent 70%)',
-                zIndex: 0
-            }} />
         </section>
     );
 };
