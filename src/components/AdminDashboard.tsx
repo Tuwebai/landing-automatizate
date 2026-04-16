@@ -133,6 +133,8 @@ const TimeSelectorModal: React.FC<TimeSelectorModalProps> = ({ isOpen, onClose, 
 const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     const [activeTab, setActiveTab] = useState<'config' | 'bookings'>('config');
     const [availability, setAvailability] = useState<AvailabilityData | null>(null);
+    const [blockedDates, setBlockedDates] = useState<string[]>([]);
+    const [selectedBlockedDate, setSelectedBlockedDate] = useState('');
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
@@ -163,6 +165,14 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                 setAvailability(DEFAULT_AVAILABILITY);
             }
 
+            const { data: blockedDatesData } = await supabase
+                .from('lndng_settings')
+                .select('value')
+                .eq('key', 'blocked_dates')
+                .maybeSingle();
+
+            setBlockedDates(Array.isArray(blockedDatesData?.value) ? blockedDatesData.value : []);
+
             const { data: bookingsData } = await supabase
                 .from('lndng_calls')
                 .select('*')
@@ -183,7 +193,10 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
         try {
             const { error } = await supabase
                 .from('lndng_settings')
-                .upsert({ key: 'availability', value: availability });
+                .upsert([
+                    { key: 'availability', value: availability },
+                    { key: 'blocked_dates', value: blockedDates }
+                ]);
 
             if (error) throw error;
             setMessage({ type: 'success', text: 'Configuración guardada' });
@@ -259,6 +272,16 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
             ...availability,
             [dayId]: { ...currentDay, slots: newSlots }
         });
+    };
+
+    const addBlockedDate = () => {
+        if (!selectedBlockedDate || blockedDates.includes(selectedBlockedDate)) return;
+        setBlockedDates([...blockedDates, selectedBlockedDate].sort());
+        setSelectedBlockedDate('');
+    };
+
+    const removeBlockedDate = (date: string) => {
+        setBlockedDates(blockedDates.filter(blockedDate => blockedDate !== date));
     };
 
     if (isLoading) {
@@ -388,6 +411,85 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                             </div>
 
                             <div style={{ display: 'grid', gap: '20px' }}>
+                                <div style={{
+                                    background: '#fff', padding: '24px', borderRadius: '24px',
+                                    border: '1px solid #e2e8f0'
+                                }}>
+                                    <div style={{ marginBottom: '20px' }}>
+                                        <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#1d1d1f', marginBottom: '8px' }}>
+                                            Bloquear fechas específicas
+                                        </h2>
+                                        <p style={{ color: '#64748b', fontSize: '0.95rem' }}>
+                                            Desactiva días puntuales del calendario aunque ese día tenga horarios configurados.
+                                        </p>
+                                    </div>
+
+                                    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: blockedDates.length > 0 ? '20px' : 0 }}>
+                                        <input
+                                            type="date"
+                                            value={selectedBlockedDate}
+                                            onChange={(e) => setSelectedBlockedDate(e.target.value)}
+                                            style={{
+                                                padding: '12px 14px',
+                                                borderRadius: '12px',
+                                                border: '1px solid #e2e8f0',
+                                                fontSize: '0.95rem',
+                                                color: '#1d1d1f',
+                                                minWidth: '220px'
+                                            }}
+                                        />
+                                        <button
+                                            onClick={addBlockedDate}
+                                            disabled={!selectedBlockedDate}
+                                            style={{
+                                                background: 'rgba(32,121,235,0.05)',
+                                                border: 'none',
+                                                color: '#2079eb',
+                                                padding: '12px 18px',
+                                                borderRadius: '12px',
+                                                fontWeight: 700,
+                                                cursor: selectedBlockedDate ? 'pointer' : 'default',
+                                                opacity: selectedBlockedDate ? 1 : 0.6
+                                            }}
+                                        >
+                                            + Bloquear día
+                                        </button>
+                                    </div>
+
+                                    {blockedDates.length > 0 ? (
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+                                            {blockedDates.map((blockedDate) => (
+                                                <div
+                                                    key={blockedDate}
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '10px',
+                                                        background: '#f8fafc',
+                                                        padding: '10px 14px',
+                                                        borderRadius: '12px',
+                                                        border: '1px solid #e2e8f0'
+                                                    }}
+                                                >
+                                                    <span style={{ fontWeight: 700, color: '#1d1d1f' }}>
+                                                        {new Date(`${blockedDate}T00:00:00`).toLocaleDateString('es-AR')}
+                                                    </span>
+                                                    <button
+                                                        onClick={() => removeBlockedDate(blockedDate)}
+                                                        style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', display: 'flex', padding: 0 }}
+                                                    >
+                                                        <Trash2 size={16} />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <p style={{ color: '#94a3b8', fontSize: '0.9rem', fontStyle: 'italic' }}>
+                                            No hay fechas bloqueadas.
+                                        </p>
+                                    )}
+                                </div>
+
                                 {DAYS.map(day => {
                                     const dayConfig = availability?.[day.id] || { enabled: false, slots: [] };
                                     return (

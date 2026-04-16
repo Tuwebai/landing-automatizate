@@ -10,8 +10,16 @@ declare global {
 }
 
 const BookingSection: React.FC = () => {
+    const formatDateKey = (date: Date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     // States
     const [availability, setAvailability] = useState<any>(null);
+    const [blockedDates, setBlockedDates] = useState<string[]>([]);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [selectedTime, setSelectedTime] = useState<string | null>(null);
     const [step, setStep] = useState(1); // 1: Calendar, 2: Form, 3: Success
@@ -100,12 +108,23 @@ const BookingSection: React.FC = () => {
 
     const fetchAvailability = async () => {
         try {
-            const { data } = await supabase
+            const { data, error } = await supabase
                 .from('lndng_settings')
                 .select('value')
                 .eq('key', 'availability')
                 .single();
+
+            if (error) throw error;
             if (data) setAvailability(data.value);
+
+            const { data: blockedDatesData, error: blockedDatesError } = await supabase
+                .from('lndng_settings')
+                .select('value')
+                .eq('key', 'blocked_dates')
+                .maybeSingle();
+
+            if (blockedDatesError) throw blockedDatesError;
+            setBlockedDates(Array.isArray(blockedDatesData?.value) ? blockedDatesData.value : []);
         } catch (err) {
             console.error('Error fetching availability:', err);
         } finally {
@@ -116,11 +135,7 @@ const BookingSection: React.FC = () => {
     const fetchBookedSlotsForDate = async (date: Date) => {
         setIsLoading(true);
         try {
-            // Generar string de fecha local YYYY-MM-DD sin errores de zona horaria
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const dateStr = `${year}-${month}-${day}`;
+            const dateStr = formatDateKey(date);
 
             const { data, error } = await supabase
                 .from('lndng_calls')
@@ -154,7 +169,9 @@ const BookingSection: React.FC = () => {
         if (!availability) return false;
         const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
         const dayName = daysOfWeek[date.getDay()];
-        return availability[dayName]?.enabled && date >= new Date(new Date().setHours(0, 0, 0, 0));
+        return availability[dayName]?.enabled
+            && date >= new Date(new Date().setHours(0, 0, 0, 0))
+            && !blockedDates.includes(formatDateKey(date));
     };
 
     const getDaySlots = () => {
@@ -199,10 +216,7 @@ const BookingSection: React.FC = () => {
                 return;
             }
 
-            const year = selectedDate.getFullYear();
-            const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
-            const day = String(selectedDate.getDate()).padStart(2, '0');
-            const dateStr = `${year}-${month}-${day}`;
+            const dateStr = formatDateKey(selectedDate);
 
             const { data: insertedBooking, error: dbError } = await supabase
                 .from('lndng_calls')
