@@ -435,6 +435,9 @@ const BookingSection: React.FC = () => {
                                                 <button
                                                     id="btn-continuar-agenda"
                                                     onClick={() => {
+                                                        if (typeof window !== 'undefined' && window.fbq) {
+                                                            window.fbq('track', 'Lead');
+                                                        }
                                                         setStep(2);
                                                     }}
                                                     style={{
@@ -593,12 +596,6 @@ const BookingSection: React.FC = () => {
                                                 if (!formData.name.trim() || !formData.businessName.trim() || !formData.phone.trim()) {
                                                     setError("Por favor completá los campos obligatorios: Nombre, Negocio y Teléfono.");
                                                     return;
-                                                }
-                                                
-                                                // Fire Meta Pixel synchronously on click like the Continuar button
-                                                if (typeof window !== 'undefined' && window.fbq) {
-                                                    window.fbq('track', 'Lead');
-                                                    console.log('Meta Pixel: Disparó evento Lead en click');
                                                 }
                                                 
                                                 handleSubmitBooking(e as any);
