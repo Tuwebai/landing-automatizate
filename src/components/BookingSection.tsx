@@ -29,29 +29,46 @@ const BookingSection: React.FC = () => {
         
         // Verifica si ya tiene agenda en este navegador
         if (typeof window !== 'undefined') {
-            const savedBooking = localStorage.getItem(LOCAL_BOOKING_KEY);
+            const validateLocalBooking = async () => {
+                const savedBooking = localStorage.getItem(LOCAL_BOOKING_KEY);
 
-            if (savedBooking) {
+                if (!savedBooking) return;
+
                 try {
                     const parsedBooking = JSON.parse(savedBooking);
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
 
-                    if (parsedBooking?.bookingDate) {
-                        const bookingDate = new Date(`${parsedBooking.bookingDate}T00:00:00`);
-
-                        if (bookingDate >= today) {
-                            setHasLocalBooking(true);
-                        } else {
-                            localStorage.removeItem(LOCAL_BOOKING_KEY);
-                        }
-                    } else {
+                    if (!parsedBooking?.bookingDate || !parsedBooking?.bookingId) {
                         localStorage.removeItem(LOCAL_BOOKING_KEY);
+                        return;
                     }
+
+                    const bookingDate = new Date(`${parsedBooking.bookingDate}T00:00:00`);
+
+                    if (bookingDate < today) {
+                        localStorage.removeItem(LOCAL_BOOKING_KEY);
+                        return;
+                    }
+
+                    const { data, error } = await supabase
+                        .from('lndng_calls')
+                        .select('id, status, booking_date')
+                        .eq('id', parsedBooking.bookingId)
+                        .maybeSingle();
+
+                    if (error || !data || data.status === 'completed') {
+                        localStorage.removeItem(LOCAL_BOOKING_KEY);
+                        return;
+                    }
+
+                    setHasLocalBooking(true);
                 } catch {
                     localStorage.removeItem(LOCAL_BOOKING_KEY);
                 }
-            }
+            };
+
+            validateLocalBooking();
         }
         
         return () => window.removeEventListener('resize', handleResize);
@@ -187,7 +204,7 @@ const BookingSection: React.FC = () => {
             const day = String(selectedDate.getDate()).padStart(2, '0');
             const dateStr = `${year}-${month}-${day}`;
 
-            const { error: dbError } = await supabase
+            const { data: insertedBooking, error: dbError } = await supabase
                 .from('lndng_calls')
                 .insert({
                     booking_date: dateStr,
@@ -197,13 +214,16 @@ const BookingSection: React.FC = () => {
                     social_media: formData.socialMedia,
                     phone: formData.phone,
                     has_investment: formData.hasInvestment
-                });
+                })
+                .select('id')
+                .single();
 
             if (dbError) throw dbError;
 
             // Guardar localmente que ya agendó
-            if (typeof window !== 'undefined') {
+            if (typeof window !== 'undefined' && insertedBooking?.id) {
                 localStorage.setItem(LOCAL_BOOKING_KEY, JSON.stringify({
+                    bookingId: insertedBooking.id,
                     bookingDate: dateStr,
                     bookingTime: selectedTime
                 }));
