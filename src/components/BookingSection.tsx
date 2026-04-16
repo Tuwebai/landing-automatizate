@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar as CalendarIcon, ArrowRight, UserCheck, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
@@ -182,6 +182,10 @@ const BookingSection: React.FC = () => {
             if (typeof window !== 'undefined') {
                 localStorage.setItem('has_booked_automatizate', 'true');
                 setHasLocalBooking(true);
+            }
+
+            if (typeof window !== 'undefined' && window.fbq) {
+                window.fbq('track', 'Schedule');
             }
 
             setStep(3);
@@ -405,9 +409,6 @@ const BookingSection: React.FC = () => {
                                                 <button
                                                     id="btn-continuar-agenda"
                                                     onClick={() => {
-                                                        if (window.fbq) {
-                                                            window.fbq('track', 'InitiateCheckout');
-                                                        }
                                                         setStep(2);
                                                     }}
                                                     style={{
@@ -570,8 +571,8 @@ const BookingSection: React.FC = () => {
                                                 
                                                 // Fire Meta Pixel synchronously on click like the Continuar button
                                                 if (typeof window !== 'undefined' && window.fbq) {
-                                                    window.fbq('track', 'Purchase', { value: 0.00, currency: 'USD' });
-                                                    console.log('Meta Pixel: Disparó evento Purchase en click');
+                                                    window.fbq('track', 'Lead');
+                                                    console.log('Meta Pixel: Disparó evento Lead en click');
                                                 }
                                                 
                                                 handleSubmitBooking(e as any);
@@ -785,3 +786,5 @@ const BookingSection: React.FC = () => {
 };
 
 export default BookingSection;
+
+
