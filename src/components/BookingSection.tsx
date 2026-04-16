@@ -21,14 +21,37 @@ const BookingSection: React.FC = () => {
     const [bookedSlots, setBookedSlots] = useState<string[]>([]);
     const [hasLocalBooking, setHasLocalBooking] = useState(false);
     const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+    const LOCAL_BOOKING_KEY = 'has_booked_automatizate';
 
     useEffect(() => {
         const handleResize = () => setWindowWidth(window.innerWidth);
         window.addEventListener('resize', handleResize);
         
         // Verifica si ya tiene agenda en este navegador
-        if (typeof window !== 'undefined' && localStorage.getItem('has_booked_automatizate')) {
-            setHasLocalBooking(true);
+        if (typeof window !== 'undefined') {
+            const savedBooking = localStorage.getItem(LOCAL_BOOKING_KEY);
+
+            if (savedBooking) {
+                try {
+                    const parsedBooking = JSON.parse(savedBooking);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    if (parsedBooking?.bookingDate) {
+                        const bookingDate = new Date(`${parsedBooking.bookingDate}T00:00:00`);
+
+                        if (bookingDate >= today) {
+                            setHasLocalBooking(true);
+                        } else {
+                            localStorage.removeItem(LOCAL_BOOKING_KEY);
+                        }
+                    } else {
+                        localStorage.removeItem(LOCAL_BOOKING_KEY);
+                    }
+                } catch {
+                    localStorage.removeItem(LOCAL_BOOKING_KEY);
+                }
+            }
         }
         
         return () => window.removeEventListener('resize', handleResize);
@@ -180,7 +203,10 @@ const BookingSection: React.FC = () => {
 
             // Guardar localmente que ya agendó
             if (typeof window !== 'undefined') {
-                localStorage.setItem('has_booked_automatizate', 'true');
+                localStorage.setItem(LOCAL_BOOKING_KEY, JSON.stringify({
+                    bookingDate: dateStr,
+                    bookingTime: selectedTime
+                }));
                 setHasLocalBooking(true);
             }
 
