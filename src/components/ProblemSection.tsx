@@ -18,33 +18,31 @@ const ProblemSection: React.FC = () => {
         >
             <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
                 <div style={{ marginBottom: '60px' }}>
-                    <h2
+                    <p
                         style={{
-                            fontSize: 'clamp(1.6rem, 4.5vw, 3rem)',
-                            fontWeight: 800,
+                            fontSize: 'clamp(1.15rem, 2.6vw, 1.8rem)',
+                            fontWeight: 500,
                             color: '#1d1d1f',
                             marginBottom: '20px',
-                            lineHeight: 1.15
+                            lineHeight: 1.45
                         }}
                     >
-                        En un mundo donde la IA <br />
-                        <span style={gradientStyle}>avanza a pasos agigantados</span>
-                    </h2>
+                        En un mundo donde la IA <strong style={gradientStyle}>avanza a pasos agigantados</strong>
+                    </p>
                 </div>
 
                 <div style={{ marginBottom: '60px' }}>
-                    <h3
+                    <p
                         style={{
-                            fontSize: 'clamp(1.4rem, 4.2vw, 2.6rem)',
-                            fontWeight: 700,
+                            fontSize: 'clamp(1.15rem, 2.6vw, 1.8rem)',
+                            fontWeight: 500,
                             color: '#1d1d1f',
                             marginBottom: '20px',
-                            lineHeight: 1.2
+                            lineHeight: 1.45
                         }}
                     >
-                        Y saber implementar las <br />
-                        <span style={gradientStyle}>herramientas correctas es complejo</span>
-                    </h3>
+                        Y saber implementar las <strong style={gradientStyle}>herramientas correctas es complejo</strong>
+                    </p>
                 </div>
 
                 <div
