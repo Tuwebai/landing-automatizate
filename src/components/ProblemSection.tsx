@@ -16,7 +16,7 @@ const ProblemSection: React.FC = () => {
                 minHeight: '100vh'
             }}
         >
-            <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
+            <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
                 <div style={{ marginBottom: '60px' }}>
                     <p
                         style={{
@@ -51,13 +51,14 @@ const ProblemSection: React.FC = () => {
                         padding: '1px',
                         background: 'linear-gradient(45deg, #5fd6fe, #2079eb)',
                         borderRadius: '40px',
-                        maxWidth: '900px',
+                        width: '100%',
+                        maxWidth: '1200px',
                         margin: '0 auto'
                     }}
                 >
                     <div style={{
                         background: '#ffffff',
-                        padding: '60px 40px',
+                        padding: '48px 32px',
                         borderRadius: '39px',
                         textAlign: 'center',
                     }}>
@@ -76,7 +77,7 @@ const ProblemSection: React.FC = () => {
                                 fontSize: 'clamp(1rem, 2.2vw, 1.5rem)',
                                 fontWeight: 500,
                                 color: '#000000',
-                                maxWidth: '800px',
+                                maxWidth: '860px',
                                 margin: '0 auto',
                                 lineHeight: 1.5
                             }}
