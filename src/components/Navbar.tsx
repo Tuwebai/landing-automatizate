@@ -38,7 +38,6 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             style={{
-                display: windowWidth <= 968 ? 'none' : 'block',
                 position: 'fixed',
                 top: 0,
                 left: 0,
@@ -49,12 +48,12 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
         >
             <div
                 style={{
+                    display: windowWidth <= 968 ? 'none' : 'flex',
                     background: 'rgba(255, 255, 255, 0.7)',
                     backdropFilter: 'blur(12px)',
                     WebkitBackdropFilter: 'blur(12px)',
                     borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
                     padding: '15px 5%',
-                    display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     boxShadow: scrolled
@@ -276,7 +275,7 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                     style={{
                         position: 'fixed',
                         left: '50%',
-                        bottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)',
+                        bottom: 'calc(env(safe-area-inset-bottom, 0px) + 36px)',
                         transform: 'translateX(-50%)',
                         background: 'linear-gradient(45deg, #2079eb, #5fd6fe)',
                         color: 'white',
