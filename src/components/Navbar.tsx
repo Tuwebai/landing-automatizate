@@ -38,6 +38,7 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             style={{
+                display: windowWidth <= 968 ? 'none' : 'block',
                 position: 'fixed',
                 top: 0,
                 left: 0,
@@ -289,7 +290,7 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                         whiteSpace: 'nowrap'
                     }}
                 >
-                    Agendar
+                    Agendar llamada
                 </motion.div>
             )}
         </motion.nav>
