@@ -7,42 +7,42 @@ const SERVICES = [
         title: 'Software Personalizado',
         subtitle: 'Gestión & Métricas',
         description: 'Plataformas web completas donde podés llevar un seguimiento de todas las áreas de tu negocio y métricas para que no te pierdas nada de lo que pasa.',
-        image: '/service-software.jpg',
+        image: '/service-software.webp',
         color: '#5fd6fe'
     },
     {
         title: 'Automatizaciones Completas',
         subtitle: 'Eficiencia Operativa',
         description: 'Desde atención al cliente las 24 horas, hasta sistemas para agilizar flujos internos y eliminar el error humano.',
-        image: '/service-systems.jpg',
+        image: '/service-systems.webp',
         color: '#2079eb'
     },
     {
         title: 'Paginas web a medida',
         subtitle: 'Presencia & Conversion',
         description: 'Disenamos sitios web pensados para la imagen de tu negocio, tu oferta y tus objetivos comerciales, con una experiencia alineada a tu marca.',
-        image: '/service-software.jpg',
+        image: '/service-software.webp',
         color: '#5fd6fe'
     },
     {
         title: 'Lo que tus redes necesitan',
         subtitle: 'Growth & Viralidad',
         description: 'Creación de contenido orgánico para tus redes. Videos con IA e imágenes para hacerte viral.',
-        image: '/service-social-hq.jpg',
+        image: '/service-social-hq.webp',
         color: '#5fd6fe'
     },
     {
         title: 'Informes mensuales y trimestrales',
         subtitle: 'Análisis & Estrategia',
         description: 'Mes a mes se va a estar enviando un informe con las métricas más importantes de su negocio, un análisis, y un resumen de lo principal que pasó en IA ese mes.',
-        image: '/service-reports.jpg',
+        image: '/service-reports.webp',
         color: '#2079eb'
     },
     {
         title: 'Evolución sin límites',
         subtitle: 'Innovación Continua',
         description: 'Investigamos y sumamos cada nuevo avance de la IA a tu operación. Si surge una tecnología superior o una nueva área donde optimizar tu negocio, la implementamos de inmediato para que nunca dejes de liderar.',
-        image: '/service-logo-new.png',
+        image: '/service-logo-new.webp',
         color: '#2079eb'
     }
 ];

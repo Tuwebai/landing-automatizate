@@ -71,7 +71,7 @@ const Footer: React.FC<FooterProps> = ({ onAdminClick, onNavigate }) => {
                             gap: '12px'
                         }}>
                             <img
-                                src="/logo.png"
+                                src="/logo.webp"
                                 alt="Logo"
                                 style={{ width: '32px', height: '32px', objectFit: 'contain' }}
                             />

@@ -184,7 +184,7 @@ const ProblemSection: React.FC = () => {
                         }}
                     >
                         <img
-                            src="/complexity-visual.png"
+                            src="/complexity-visual.webp"
                             alt="Complejidad de la IA"
                             style={{
                                 width: '100%',

@@ -310,7 +310,7 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '48px', padding: '0 12px' }}>
                     <img
-                        src="/logo.png"
+                        src="/logo.webp"
                         alt="Logo"
                         style={{ width: '32px', height: '32px', objectFit: 'contain' }}
                     />
