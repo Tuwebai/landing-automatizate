@@ -1,5 +1,4 @@
 import Navbar from './components/Navbar'
-import Hero from './components/Hero'
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 
 const ProblemSection = lazy(() => import('./components/ProblemSection'))
@@ -92,7 +91,6 @@ function App() {
 
       {view === 'home' ? (
         <>
-          <Hero />
           <DeferredSection minHeight="760px">
             <ProblemSection />
           </DeferredSection>
