@@ -94,6 +94,7 @@ Llevar la landing a un estado de performance productivo, medible y sostenible, p
 
 ## Fase 3 — Peso total de página
 **Prioridad:** P0
+**Estado:** en progreso
 
 ### Pendientes
 1. Reducir peso total de la página de 3 MB a menos de 1 MB
@@ -127,6 +128,12 @@ Llevar la landing a un estado de performance productivo, medible y sostenible, p
 - Home por debajo de 1 MB transferido en condiciones objetivo
 - CSS y JS minificados en producción
 - No hay assets grandes sin justificación de negocio
+
+### Resultado ejecutado
+- Se confirmó minificación productiva de CSS y JavaScript vía Vite build.
+- Se movieron secciones below-the-fold a carga diferida por visibilidad para evitar descargar JS no crítico en el primer viewport.
+- Se configuró partición manual de bundles para React, motion, íconos y Supabase.
+- El chunk principal quedó reducido a ~13.9 kB sin comprimir; quedan pendientes mediciones finales de transferencia total para cerrar la fase.
 
 ## Fase 4 — Verificación y release gate
 **Prioridad:** P1

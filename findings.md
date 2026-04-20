@@ -26,3 +26,13 @@
 - La estrategia aplicada es:
   - assets hashados y recursos estáticos: `public, max-age=31536000, immutable`
   - HTML/documentos: `public, max-age=0, must-revalidate`
+
+## Fase 3 ejecutada parcialmente
+- La build de producción ya minifica CSS y JS.
+- Secciones no críticas del home ahora se descargan por visibilidad, no en el primer viewport.
+- Se forzó chunking por dominios técnicos:
+  - `react-vendor`
+  - `motion-vendor`
+  - `supabase`
+- El entry chunk bajó de ~372 kB a ~13.9 kB sin comprimir.
+- Aún falta validar el peso total transferido de la home contra el objetivo de menos de 1 MB.

@@ -11,3 +11,7 @@
   - política de caché larga para assets estáticos/versionados
   - revalidación corta para HTML
   - configuración lista para Vercel y Netlify
+- Se avanzó en la fase 3 de peso total:
+  - minificación productiva confirmada
+  - secciones below-the-fold diferidas por visibilidad
+  - chunk principal reducido drásticamente mediante lazy loading y manual chunks
