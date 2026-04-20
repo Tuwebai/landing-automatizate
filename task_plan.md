@@ -58,6 +58,7 @@ Llevar la landing a un estado de performance productivo, medible y sostenible, p
 
 ## Fase 2 — Caché y capa de entrega
 **Prioridad:** P0
+**Estado:** completada
 
 ### Pendientes
 1. Configurar caché del navegador para recursos estáticos
@@ -84,6 +85,12 @@ Llevar la landing a un estado de performance productivo, medible y sostenible, p
 - Assets estáticos salen desde edge con caché larga
 - HTML conserva frescura sin romper releases
 - TTFB y transferencia internacional mejoran o se mantienen estables
+
+### Resultado ejecutado
+- Se configuró política de caché agresiva para assets versionados y estáticos.
+- Se dejó HTML bajo revalidación controlada para no romper releases.
+- Se agregó soporte de headers para Vercel y Netlify.
+- La capa CDN queda activa automáticamente en despliegues sobre Vercel; en Netlify queda preparada con `_headers`.
 
 ## Fase 3 — Peso total de página
 **Prioridad:** P0

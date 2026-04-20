@@ -7,3 +7,7 @@
   - Meta Pixel pasó a carga diferida sin romper tracking en cola.
   - `BookingSection`, `AdminLogin` y `AdminDashboard` quedaron en lazy loading.
   - El build validó chunks separados para código no crítico.
+- Se completó la fase 2 de caché y entrega:
+  - política de caché larga para assets estáticos/versionados
+  - revalidación corta para HTML
+  - configuración lista para Vercel y Netlify

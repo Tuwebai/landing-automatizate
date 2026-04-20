@@ -18,3 +18,11 @@
   - `AdminLogin`: 5.66 kB
   - `AdminDashboard`: 19.16 kB
   - `index`: 372.10 kB
+
+## Fase 2 ejecutada
+- El proyecto no tenía configuración previa de hosting ni headers de caché.
+- Se agregó `vercel.json` para servir assets desde edge con caché larga en despliegues Vercel.
+- Se agregó `public/_headers` para compatibilidad equivalente en Netlify.
+- La estrategia aplicada es:
+  - assets hashados y recursos estáticos: `public, max-age=31536000, immutable`
+  - HTML/documentos: `public, max-age=0, must-revalidate`
