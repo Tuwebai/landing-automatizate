@@ -73,6 +73,10 @@ const Footer: React.FC<FooterProps> = ({ onAdminClick, onNavigate }) => {
                             <img
                                 src="/logo.webp"
                                 alt="Logo"
+                                width={1024}
+                                height={1024}
+                                loading="lazy"
+                                decoding="async"
                                 style={{ width: '32px', height: '32px', objectFit: 'contain' }}
                             />
                             <span style={{

@@ -186,6 +186,10 @@ const ProblemSection: React.FC = () => {
                         <img
                             src="/complexity-visual.webp"
                             alt="Complejidad de la IA"
+                            width={1024}
+                            height={682}
+                            loading="lazy"
+                            decoding="async"
                             style={{
                                 width: '100%',
                                 height: 'auto',
