@@ -267,6 +267,31 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                     </>
                 )}
             </AnimatePresence>
+
+            {windowWidth <= 968 && !isMenuOpen && (
+                <motion.div
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => onNavigate?.('booking-section')}
+                    style={{
+                        position: 'fixed',
+                        left: '50%',
+                        bottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)',
+                        transform: 'translateX(-50%)',
+                        background: 'linear-gradient(45deg, #2079eb, #5fd6fe)',
+                        color: 'white',
+                        padding: '14px 32px',
+                        borderRadius: '999px',
+                        fontSize: '1rem',
+                        fontWeight: 800,
+                        cursor: 'pointer',
+                        boxShadow: '0 12px 30px rgba(32, 121, 235, 0.28)',
+                        zIndex: 1005,
+                        whiteSpace: 'nowrap'
+                    }}
+                >
+                    Agendar
+                </motion.div>
+            )}
         </motion.nav>
     );
 };
