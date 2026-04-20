@@ -11,7 +11,7 @@ const ProblemSection: React.FC = () => {
     return (
         <section
             style={{
-                padding: '0 5% 100px 5%',
+                padding: '120px 5% 100px 5%',
                 background: 'linear-gradient(to bottom, transparent 0%, #ffffff 15%, #ffffff 100%)',
                 minHeight: '100vh'
             }}
