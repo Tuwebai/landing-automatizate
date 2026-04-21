@@ -94,3 +94,51 @@ h6 {
   opacity: 0.15;
   pointer-events: none;
 }
+
+@keyframes navSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.navbar-root {
+  animation: navSlideDown 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.mobile-menu-backdrop {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.mobile-menu-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-menu {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+
+.mobile-menu.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.nav-link-btn {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-link-btn:active {
+  transform: scale(0.95);
+}

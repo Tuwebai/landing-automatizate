@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
 interface NavbarProps {
@@ -33,10 +32,8 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
     ];
 
     return (
-        <motion.nav
-            initial={{ y: -100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        <nav
+            className="navbar-root"
             style={{
                 position: 'fixed',
                 top: 0,
@@ -103,10 +100,10 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                     marginLeft: 'auto'
                 }}>
                     {navLinks.map((link) => (
-                        <motion.button
+                        <button
                             key={link.name}
                             onClick={() => onNavigate?.(link.id)}
-                            whileHover={{ y: -2 }}
+                            className="nav-link-btn"
                             style={{
                                 background: 'none',
                                 border: 'none',
@@ -115,7 +112,7 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                                 fontSize: '0.9rem',
                                 fontWeight: 600,
                                 opacity: 0.8,
-                                transition: 'opacity 0.2s ease',
+                                transition: 'opacity 0.2s ease, transform 0.2s ease',
                                 cursor: 'pointer',
                                 padding: '10px 0'
                             }}
@@ -123,13 +120,12 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                             onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.8')}
                         >
                             {link.name}
-                        </motion.button>
+                        </button>
                     ))}
 
-                    <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                    <div
                         onClick={() => onNavigate?.('booking-section')}
+                        className="nav-link-btn"
                         style={{
                             background: 'linear-gradient(45deg, #2079eb, #5fd6fe)',
                             color: 'white',
@@ -143,7 +139,7 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                         }}
                     >
                         Agendar
-                    </motion.div>
+                    </div>
                 </div>
 
                 {/* Mobile Menu Button */}
@@ -165,113 +161,100 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
             </div>
 
             {/* Mobile Menu Overlay */}
-            <AnimatePresence>
-                {isMenuOpen && (
-                    <>
-                        {/* Background Backdrop for clicking outside */}
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setIsMenuOpen(false)}
-                            style={{
-                                position: 'fixed',
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                background: 'rgba(0,0,0,0.1)',
-                                backdropFilter: 'blur(4px)',
-                                zIndex: 999
-                            }}
-                        />
-                        <motion.div
-                            initial={windowWidth > 968 ? { x: '100%' } : { x: 0 }}
-                            animate={{ x: 0 }}
-                            exit={windowWidth > 968 ? { x: '100%' } : { x: 0, opacity: 0 }}
-                            transition={windowWidth > 968 ? { type: 'tween', duration: 0.3, ease: 'easeOut' } : { duration: 0 }}
-                            style={{
-                                position: 'fixed',
-                                top: 0,
-                                right: 0,
-                                bottom: 0,
-                                width: '80%',
-                                maxWidth: '300px',
-                                background: '#ffffff',
-                                boxShadow: '-10px 0 30px rgba(0,0,0,0.1)',
-                                zIndex: 1000,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                padding: '40px',
-                                gap: '30px',
-                                willChange: 'transform'
-                            }}
-                        >
-                            {/* Inner Close Button for Mobile */}
-                            <div
-                                onClick={() => setIsMenuOpen(false)}
-                                style={{
-                                    alignSelf: 'flex-end',
-                                    padding: '10px',
-                                    cursor: 'pointer',
-                                    color: '#1d1d1f',
-                                    marginBottom: '10px'
-                                }}
-                            >
-                                <X size={32} />
-                            </div>
+            <div
+                onClick={() => setIsMenuOpen(false)}
+                className={`mobile-menu-backdrop${isMenuOpen ? ' open' : ''}`}
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(0,0,0,0.1)',
+                    backdropFilter: 'blur(4px)',
+                    zIndex: 999
+                }}
+            />
+            <div
+                className={`mobile-menu${isMenuOpen ? ' open' : ''}`}
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    width: '80%',
+                    maxWidth: '300px',
+                    background: '#ffffff',
+                    boxShadow: '-10px 0 30px rgba(0,0,0,0.1)',
+                    zIndex: 1000,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    padding: '40px',
+                    gap: '30px',
+                    willChange: 'transform, opacity'
+                }}
+            >
+                <div
+                    onClick={() => setIsMenuOpen(false)}
+                    style={{
+                        alignSelf: 'flex-end',
+                        padding: '10px',
+                        cursor: 'pointer',
+                        color: '#1d1d1f',
+                        marginBottom: '10px'
+                    }}
+                >
+                    <X size={32} />
+                </div>
 
-                            {navLinks.map((link) => (
-                                <motion.button
-                                    key={link.name}
-                                    onClick={() => {
-                                        onNavigate?.(link.id);
-                                        setIsMenuOpen(false);
-                                    }}
-                                    whileTap={{ scale: 0.95 }}
-                                    style={{
-                                        background: 'none',
-                                        border: 'none',
-                                        textAlign: 'left',
-                                        fontSize: '1.2rem',
-                                        fontWeight: 700,
-                                        color: '#1d1d1f',
-                                        cursor: 'pointer',
-                                        padding: '10px 0'
-                                    }}
-                                >
-                                    {link.name}
-                                </motion.button>
-                            ))}
-                            <motion.div
-                                whileTap={{ scale: 0.95 }}
-                                onClick={() => {
-                                    onNavigate?.('booking-section');
-                                    setIsMenuOpen(false);
-                                }}
-                                style={{
-                                    background: 'linear-gradient(45deg, #2079eb, #5fd6fe)',
-                                    color: 'white',
-                                    padding: '15px',
-                                    borderRadius: '15px',
-                                    textAlign: 'center',
-                                    fontSize: '1rem',
-                                    fontWeight: 800,
-                                    marginTop: '20px',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                Agendar Llamada
-                            </motion.div>
-                        </motion.div>
-                    </>
-                )}
-            </AnimatePresence>
+                {navLinks.map((link) => (
+                    <button
+                        key={link.name}
+                        onClick={() => {
+                            onNavigate?.(link.id);
+                            setIsMenuOpen(false);
+                        }}
+                        className="nav-link-btn"
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            textAlign: 'left',
+                            fontSize: '1.2rem',
+                            fontWeight: 700,
+                            color: '#1d1d1f',
+                            cursor: 'pointer',
+                            padding: '10px 0'
+                        }}
+                    >
+                        {link.name}
+                    </button>
+                ))}
+                <div
+                    onClick={() => {
+                        onNavigate?.('booking-section');
+                        setIsMenuOpen(false);
+                    }}
+                    className="nav-link-btn"
+                    style={{
+                        background: 'linear-gradient(45deg, #2079eb, #5fd6fe)',
+                        color: 'white',
+                        padding: '15px',
+                        borderRadius: '15px',
+                        textAlign: 'center',
+                        fontSize: '1rem',
+                        fontWeight: 800,
+                        marginTop: '20px',
+                        cursor: 'pointer'
+                    }}
+                >
+                    Agendar Llamada
+                </div>
+            </div>
 
             {windowWidth <= 968 && !isMenuOpen && (
-                <motion.div
-                    whileTap={{ scale: 0.97 }}
+                <div
                     onClick={() => onNavigate?.('booking-section')}
+                    className="nav-link-btn"
                     style={{
                         position: 'fixed',
                         left: '50%',
@@ -290,9 +273,9 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                     }}
                 >
                     Agendar llamada
-                </motion.div>
+                </div>
             )}
-        </motion.nav>
+        </nav>
     );
 };
 
