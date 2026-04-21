@@ -61,7 +61,8 @@ const SERVICES = [
 ];
 
 // Pendiente: generar versiones AVIF para estas imágenes con Squoosh antes de producción.
-// Comando sugerido:
+// En Node.js 24 falla; correr esto con Node 18 LTS:
+// nvm use 18
 // npx @squoosh/cli --avif '{"cqLevel":28,"effort":6}' public/service-software.webp public/service-systems.webp public/service-social-hq.webp public/service-reports.webp public/service-logo-new.webp
 
 const ServicesSection: React.FC = () => {
