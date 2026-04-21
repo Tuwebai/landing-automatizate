@@ -9,6 +9,7 @@ const SERVICES = [
         subtitle: 'Gestión & Métricas',
         description: 'Plataformas web completas donde podés llevar un seguimiento de todas las áreas de tu negocio y métricas para que no te pierdas nada de lo que pasa.',
         image: '/service-software.webp',
+        avifImage: '/service-software.avif',
         width: 1024,
         height: 1024,
         color: '#5fd6fe'
@@ -18,6 +19,7 @@ const SERVICES = [
         subtitle: 'Eficiencia Operativa',
         description: 'Desde atención al cliente las 24 horas, hasta sistemas para agilizar flujos internos y eliminar el error humano.',
         image: '/service-systems.webp',
+        avifImage: '/service-systems.avif',
         width: 1024,
         height: 1024,
         color: '#2079eb'
@@ -27,6 +29,7 @@ const SERVICES = [
         subtitle: 'Presencia & Conversion',
         description: 'Disenamos sitios web pensados para la imagen de tu negocio, tu oferta y tus objetivos comerciales, con una experiencia alineada a tu marca.',
         image: '/service-software.webp',
+        avifImage: '/service-software.avif',
         width: 1024,
         height: 1024,
         color: '#5fd6fe'
@@ -36,6 +39,7 @@ const SERVICES = [
         subtitle: 'Growth & Viralidad',
         description: 'Creación de contenido orgánico para tus redes. Videos con IA e imágenes para hacerte viral.',
         image: '/service-social-hq.webp',
+        avifImage: '/service-social-hq.avif',
         width: 1020,
         height: 1012,
         color: '#5fd6fe'
@@ -45,6 +49,7 @@ const SERVICES = [
         subtitle: 'Análisis & Estrategia',
         description: 'Mes a mes se va a estar enviando un informe con las métricas más importantes de su negocio, un análisis, y un resumen de lo principal que pasó en IA ese mes.',
         image: '/service-reports.webp',
+        avifImage: null,
         width: 1024,
         height: 995,
         color: '#2079eb'
@@ -54,6 +59,7 @@ const SERVICES = [
         subtitle: 'Innovación Continua',
         description: 'Investigamos y sumamos cada nuevo avance de la IA a tu operación. Si surge una tecnología superior o una nueva área donde optimizar tu negocio, la implementamos de inmediato para que nunca dejes de liderar.',
         image: '/service-logo-new.webp',
+        avifImage: null,
         width: 1024,
         height: 1024,
         color: '#2079eb'
@@ -245,7 +251,7 @@ const ServicesSection: React.FC = () => {
                                 overflow: 'hidden'
                             }}>
                                 <picture>
-                                    <source srcSet={service.image.replace('.webp', '.avif')} type="image/avif" />
+                                    {service.avifImage && <source srcSet={service.avifImage} type="image/avif" />}
                                     <img
                                         src={service.image}
                                         alt={service.title}
