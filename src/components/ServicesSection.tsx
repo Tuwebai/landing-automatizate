@@ -59,6 +59,10 @@ const SERVICES = [
     }
 ];
 
+// Pendiente: generar versiones AVIF para estas imágenes con Squoosh antes de producción.
+// Comando sugerido:
+// npx @squoosh/cli --avif '{"cqLevel":28,"effort":6}' public/service-software.webp public/service-systems.webp public/service-social-hq.webp public/service-reports.webp public/service-logo-new.webp
+
 const ServicesSection: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
@@ -244,21 +248,24 @@ const ServicesSection: React.FC = () => {
                                 order: windowWidth > 800 ? 2 : 1,
                                 overflow: 'hidden'
                             }}>
-                                <img
-                                    src={service.image}
-                                    alt={service.title}
-                                    width={service.width}
-                                    height={service.height}
-                                    loading="lazy"
-                                    decoding="async"
-                                    style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: service.title === 'EvoluciÃ³n sin lÃ­mites' ? 'contain' : 'cover',
-                                        padding: service.title === 'EvoluciÃ³n sin lÃ­mites' ? '20px' : '0',
-                                        objectPosition: 'center'
-                                    }}
-                                />
+                                <picture>
+                                    <source srcSet={service.image.replace('.webp', '.avif')} type="image/avif" />
+                                    <img
+                                        src={service.image}
+                                        alt={service.title}
+                                        width={service.width}
+                                        height={service.height}
+                                        loading={index === 0 ? 'eager' : 'lazy'}
+                                        decoding="async"
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: service.title === 'EvoluciÃ³n sin lÃ­mites' ? 'contain' : 'cover',
+                                            padding: service.title === 'EvoluciÃ³n sin lÃ­mites' ? '20px' : '0',
+                                            objectPosition: 'center'
+                                        }}
+                                    />
+                                </picture>
                                 <div style={{
                                     position: 'absolute',
                                     inset: 0,
