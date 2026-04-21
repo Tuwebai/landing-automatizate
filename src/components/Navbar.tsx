@@ -275,7 +275,7 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                     style={{
                         position: 'fixed',
                         left: '50%',
-                        bottom: 'calc(env(safe-area-inset-bottom, 0px) + 36px)',
+                        bottom: 'calc(env(safe-area-inset-bottom, 0px) + 50px)',
                         transform: 'translateX(-50%)',
                         background: 'linear-gradient(45deg, #2079eb, #5fd6fe)',
                         color: 'white',

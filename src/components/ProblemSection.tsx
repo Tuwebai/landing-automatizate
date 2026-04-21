@@ -47,19 +47,17 @@ const ProblemSection: React.FC = () => {
 
                 <div
                     style={{
-                        position: 'relative',
-                        padding: '1px',
-                        background: 'linear-gradient(45deg, #5fd6fe, #2079eb)',
+                        border: '1px solid #4dabff',
                         borderRadius: '40px',
                         width: '100%',
                         maxWidth: '1200px',
-                        margin: '0 auto'
+                        margin: '0 auto',
                     }}
                 >
                     <div style={{
                         background: '#ffffff',
                         padding: '48px 32px',
-                        borderRadius: '39px',
+                        borderRadius: '40px',
                         textAlign: 'center',
                     }}>
                         <h4
