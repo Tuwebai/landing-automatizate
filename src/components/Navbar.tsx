@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import { useWindowWidth } from '../hooks/useWindowWidth';
 
 interface NavbarProps {
     setView?: (view: 'home' | 'case-study' | 'admin-login' | 'admin-dashboard') => void;
@@ -9,18 +10,15 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
     const [scrolled, setScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+    const windowWidth = useWindowWidth();
 
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 50);
         };
-        const handleResize = () => setWindowWidth(window.innerWidth);
         window.addEventListener('scroll', handleScroll);
-        window.addEventListener('resize', handleResize);
         return () => {
             window.removeEventListener('scroll', handleScroll);
-            window.removeEventListener('resize', handleResize);
         };
     }, []);
 

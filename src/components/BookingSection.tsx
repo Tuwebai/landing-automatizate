@@ -2,6 +2,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar as CalendarIcon, ArrowRight, UserCheck, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { useWindowWidth } from '../hooks/useWindowWidth';
 
 declare global {
     interface Window {
@@ -28,13 +29,10 @@ const BookingSection: React.FC = () => {
     const [error, setError] = useState('');
     const [bookedSlots, setBookedSlots] = useState<string[]>([]);
     const [hasLocalBooking, setHasLocalBooking] = useState(false);
-    const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+    const windowWidth = useWindowWidth();
     const LOCAL_BOOKING_KEY = 'has_booked_automatizate';
 
     useEffect(() => {
-        const handleResize = () => setWindowWidth(window.innerWidth);
-        window.addEventListener('resize', handleResize);
-        
         // Verifica si ya tiene agenda en este navegador
         if (typeof window !== 'undefined') {
             const validateLocalBooking = async () => {
@@ -79,7 +77,6 @@ const BookingSection: React.FC = () => {
             validateLocalBooking();
         }
         
-        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     const [formData, setFormData] = useState({

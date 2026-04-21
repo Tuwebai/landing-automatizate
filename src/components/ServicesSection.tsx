@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useWindowWidth } from '../hooks/useWindowWidth';
 
 const SERVICES = [
     {
@@ -65,13 +66,7 @@ const SERVICES = [
 
 const ServicesSection: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
-
-    useEffect(() => {
-        const handleResize = () => setWindowWidth(window.innerWidth);
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    const windowWidth = useWindowWidth();
 
     const next = () => setCurrentIndex((prev) => (prev + 1) % SERVICES.length);
     const prev = () => setCurrentIndex((prev) => (prev - 1 + SERVICES.length) % SERVICES.length);
