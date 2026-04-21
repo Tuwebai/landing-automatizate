@@ -147,7 +147,7 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                         setIsMenuOpen(!isMenuOpen);
                     }}
                     style={{
-                        display: windowWidth <= 968 ? 'flex' : 'none',
+                        display: 'none',
                         cursor: 'pointer',
                         padding: '10px',
                         zIndex: 1010, // Above overlay
@@ -249,7 +249,7 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
                 </div>
             </div>
 
-            {windowWidth <= 968 && !isMenuOpen && (
+            {windowWidth <= 968 && (
                 <div
                     onClick={() => onNavigate?.('booking-section')}
                     className="nav-link-btn"
