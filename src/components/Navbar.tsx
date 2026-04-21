@@ -31,7 +31,7 @@ const Navbar: React.FC<NavbarProps> = ({ setView, onNavigate }) => {
 
     return (
         <nav
-            className="navbar-root"
+            className={windowWidth > 968 ? "navbar-root" : undefined}
             style={{
                 position: 'fixed',
                 top: 0,
